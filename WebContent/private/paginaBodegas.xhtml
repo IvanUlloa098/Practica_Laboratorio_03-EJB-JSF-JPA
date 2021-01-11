@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"></script>
+    <link rel="stylesheet" href="style/style.css"/>
+
+    <title>Bodegas</title>
+
+
+    <!--comentario-->
+    <script type="text/javascript">
+        function indicador(data) {
+            if (data.status == "begin")
+                document.getElementById("id5").style.display = "inline";
+            else if (data.status == "success")
+                document.getElementById("id5").style.display = "none";
+        }
+    </script>
+
+</h:head>
+
+<h:outputLabel value="#{bodegaBean.cookie}" style="display: none"/>
+
+<h:form>
+
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: black; width: 100%">
+        <div>
+            <a href="https://www.javaguides.net" class="navbar-brand">TiendaOnline.com </a>
+        </div>
+
+        <ul class="navbar-nav">
+            <li>
+                <h:commandLink class="nav-link" action="#{bodegaBean.regresar}" value="Regresar"/>
+            </li>
+        </ul>
+        <button style="margin-left: auto" class="btn  btn-outline-success my-2 my-sm-0 " type="submit"> Cerrar Sesion
+        </button>
+    </nav>
+</h:form>
+
+<h:body styleClass="modal-body text-center">
+
+    <h3>Gestión de bodegas</h3>
+
+    <h:form>
+
+        <fieldset>
+            <legend>Registrar Bodega Nueva</legend>
+
+            <p>Nombre Bodega:<h:inputText size="10" value="#{bodegaBean.nombre}"/></p>
+            <h:outputLabel style="display: none" value="#{bodegaBean.cookie}"/>
+            <p>Ubicacion:</p>
+            <p>
+                Pais:
+                <h:selectOneMenu value="#{bodegaBean.level1}">
+                    <f:selectItems value="#{bodegaBean.level1List}"/>
+                    <f:ajax render="idList2 idList3 id4" onevent="indicador"/>
+                </h:selectOneMenu>
+            </p>
+
+            <p>
+                Provincia:
+                <h:selectOneMenu value="#{bodegaBean.level2}" id="idList2"
+                                 disabled="#{bodegaBean.level2ListDisabled}">
+                    <f:selectItems value="#{bodegaBean.level2List}"/>
+                    <f:ajax render="idList3 id4" onevent="indicador"/>
+                </h:selectOneMenu>
+            </p>
+
+            <p>
+                Canton:
+                <h:selectOneMenu value="#{bodegaBean.level3}" id="idList3"
+                                 disabled="#{bodegaBean.level3ListDisabled}">
+                    <f:selectItems value="#{bodegaBean.level3List}"/>
+                    <f:ajax render="id4" onevent="indicador"/>
+                </h:selectOneMenu>
+            </p>
+
+            <br/> <span id="id5" style="display: none;"> Cargando... </span>Elegido:
+            <h:outputText value="#{bodegaBean.level3}" id="id4"/>
+
+            <p><h:commandButton value="Agregar" action="#{bodegaBean.add}" styleClass="btn btn-primary"/></p>
+        </fieldset>
+
+
+        <h:dataTable value="#{bodegaBean.bodegas}" var="b" styleClass="table table-bordered table-hover">
+            <h:column>
+                <f:facet name="header">Codigo</f:facet>#{b.codigo}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                <h:inputText value="#{b.nombre}" size="10" rendered="#{b.editable}"/>
+                <h:outputText value="#{b.nombre}" rendered="#{not b.editable}"/>
+            </h:column>
+
+
+            <h:column>
+                <f:facet name="header">Ciudad</f:facet>
+                <h:inputText value="#{b.ciudad.nombre}" size="10" rendered="#{b.editable}"/>
+                <h:outputText value="#{b.ciudad.nombre}" rendered="#{not b.editable}"/>
+            </h:column>
+
+            <!--     <h:column>
+                     <f:facet name="header">Accion</f:facet>
+                     <h:commandLink value="Delete" action="#{bodegaBean.deleted(b)}" />
+                 </h:column>-->
+            <h:column>
+                <f:facet name="header">Accion</f:facet>
+
+                <h:commandLink value="Editar Bodega" action="#{bodegaBean.buscarBodega(b.codigo)}"
+                               styleClass="btn btn-primary">
+                    <f:actionListener binding="#{bodegaBean.navegar()}"/>
+                </h:commandLink>
+            </h:column>
+
+        </h:dataTable>
+
+    </h:form>
+</h:body>
+
+</html>
