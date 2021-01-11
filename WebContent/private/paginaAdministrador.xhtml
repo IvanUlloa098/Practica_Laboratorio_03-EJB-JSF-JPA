@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' type=""></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<h:head>
+    <title>Registro Producto</title>
+
+    <style type="">
+        h3{
+            margin-left: 5%;
+        }
+
+    </style>
+
+</h:head>
+
+<h:body>
+    <div class="navbar navbar-inverse" style="background-color: gainsboro">
+        <div class="">
+            <div class="navbar-brand"><i class="material-icons" style="font-size:30px;color:red">shopping_cart</i>Tus bodegas</div>
+        </div>
+        <h:form>
+            <h:commandLink/>
+            <h:commandLink/>
+            <h:commandLink action="#{productoBean.redirectBodegas}">Administrar Bodegas <i class='fab fa-codepen' style='font-size:24px'/></h:commandLink>
+            <h:commandLink>Pedidos <i class='fas fa-address-card' style='font-size:24px'/></h:commandLink>
+
+            <h:commandLink action="#{productoBean.deleteCookie}">Cerrar Sesion  <i class="fa fa-window-close" style="font-size:24px"/></h:commandLink>
+        </h:form>
+        <h:outputLabel value="#{productoBean.cookie}"/>
+    </div>
+
+
+    <h:form style="float: left;width: 40%;margin-right: 10%;margin-left: 10%;margin-top: 4%;">
+        <h3>Registro Producto</h3>
+        <h:outputText value="nombre" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px; display: block;width: 60%;"/>
+        <h:inputText id="nombre" value="#{productoBean.nombre}" style="width: 60%;"></h:inputText>
+        <h:message for="nombre"></h:message>
+        <br></br><br></br>
+
+        <h:outputText value="imagen" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;  display: block;width: 60%;" />
+        <h:inputText id="imagen" value="#{productoBean.imagen}" style="width: 60%;"></h:inputText>
+        <h:message for="imagen"></h:message>
+        <br></br><br></br>
+
+        <h:outputText value="precioCompra" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 60%;"/>
+        <h:inputText id="precioCompra" value="#{productoBean.precioCompra}" style="width: 60%;"></h:inputText>
+        <h:message for="precioCompra"></h:message>
+        <br></br><br></br>
+
+        <h:outputText value="precioVenta" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 60%;"/>
+        <h:inputText id="precioVenta" value="#{productoBean.precioVenta}" style="width: 60%;"></h:inputText>
+        <h:message for="precioVenta"></h:message>
+        <br></br><br></br>
+
+        <h:outputText value="IVA" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 60%;"/>
+        <h:inputText id="iva" value="#{productoBean.iva}" style="width: 60%;"></h:inputText>
+        <h:message for="iva"></h:message>
+        <br></br><br></br>
+
+        <h:outputText value="stock" style="background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 60%;"/>
+        <h:inputText id="stock" value="#{productoBean.stock}" style="width: 60%;"></h:inputText>
+        <h:message for="stock"></h:message>
+        <br></br><br></br>
+
+        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.categoria}" style="margin-right: 5%;">
+            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.nombre}" itemLabel="#{categoria.nombre}" pt:styleClass="dropdown-item"/>
+        </h:selectOneMenu>
+
+        <h:selectManyMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodegas}" style="height: 30px;">
+            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}">
+            </f:selectItems>
+        </h:selectManyMenu>
+
+        <h:commandButton action="#{productoBean.addProducto}"
+                         value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
+
+    </h:form >
+
+    <h:dataTable  style="width: 17%; height:200px;margin-top: 2%;" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
+                  headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
+        <h:column>
+            <f:facet name="header">Imagen</f:facet>
+            <img style="width: 100%" alt="" src="#{c.imagen}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">Nombre</f:facet>
+            <h:outputText value="#{c.nombre}"  />
+        </h:column>
+    </h:dataTable>
+    <h:form>
+        <h:outputText value="Agregar a Stock" style="float: left; background-color: blue; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
+
+        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedProducto}" style="margin-right: 5%;">
+            <f:selectItems  value="#{productoBean.productos}" var="producto" itemValue="#{producto.nombre}" itemLabel="#{producto.nombre}" pt:styleClass="dropdown-item"/>
+        </h:selectOneMenu>
+
+        <h:outputText value="INGRESE LA CANTIDAD NUEVA" style="float: left; background-color: blue; color: #f0f8ff;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
+        <h:inputText id="stock_mas" value="#{productoBean.stock_mas}" style="width: 30%;float: left"></h:inputText>
+        <h:message for="stock_mas"></h:message>
+
+        <h:selectManyMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.bodegas_stock}" style="height: 30px;">
+            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}">
+            </f:selectItems>
+        </h:selectManyMenu>
+
+        <h:commandButton action="#{productoBean.aumentarStock}"
+                         value="Actualizar" class="btn btn-primary" style="margin-left: 3%;width: 25%;margin-top: 5%"></h:commandButton>
+
+    </h:form>
+    <h:form>
+        <fieldset>
+            <h:selectOneMenu value="#{productoBean.bodega_inventario}">
+                <f:selectItems value="#{productoBean.bodegas}" var="bodega" itemValue="#{bodega.nombre}" itemLabel="#{bodega.nombre}" pt:styleClass="dropdown-item"/>
+                <f:ajax render ="idList2 idList3 tabla" event="change" />
+            </h:selectOneMenu>
+            <br />Level2:
+
+            <h:dataTable  value="#{productoBean.productos_list}" var="c" styleClass="table table-dark table-striped"
+                          headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style=" width: 35%; margin-top: 2%; " id="tabla">
+
+                <h:column>
+                    <f:facet name="header">Nombre</f:facet>
+                    <h:outputText value="#{c.nombre}"  />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Stock</f:facet>
+                    <h:outputText value="#{c.stock}"  />
+                </h:column>
+            </h:dataTable>
+        </fieldset>
+    </h:form>
+
+
+
+</h:body>
+</html>

@@ -118,14 +118,5 @@ public class LoginBean implements Serializable {
         }
     }
     
-    public void crear_usuario() {
-    	Usuario usuario = new Usuario();
-    	usuario.setCorreo("kgodoym@est.ups.edu.ec");
-    	usuario.setPassword("1234");
-    	usuario.setRol(null);
-    	
-    	ejbUsuarioFacade.create(usuario);
-    	
-    	
-    }
+    
 }
