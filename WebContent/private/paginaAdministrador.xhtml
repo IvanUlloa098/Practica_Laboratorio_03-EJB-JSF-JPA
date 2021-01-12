@@ -109,7 +109,7 @@
           <h:column>
         
            <f:facet name="header">PrecioVenta</f:facet>
-            <h:outputText value="#{p.precioCompra}"  />
+            <h:outputText value="#{p.precioVenta}"  />
             
         </h:column>
           
@@ -132,7 +132,7 @@
             </f:selectItems>
         </h:selectManyMenu>
 
-        <h:commandButton
+        <h:commandButton action="#{productoBean.aumentarStock}"
                          value="Actualizar" class="btn btn-primary" style="margin-left: 63%;width: 25%;margin-top: 5%"></h:commandButton>
 
     </h:form>

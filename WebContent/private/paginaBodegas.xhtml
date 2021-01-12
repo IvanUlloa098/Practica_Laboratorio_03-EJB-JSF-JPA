@@ -94,10 +94,7 @@
 
 
         <h:dataTable value="#{bodegaBean.bodegas}" var="b" styleClass="table table-bordered table-hover">
-            <h:column>
-                <f:facet name="header">Codigo</f:facet>#{b.codigo}
-            </h:column>
-
+           
             <h:column>
                 <f:facet name="header">Nombre</f:facet>
                 <h:inputText value="#{b.nombre}" size="10" rendered="#{b.editable}"/>
