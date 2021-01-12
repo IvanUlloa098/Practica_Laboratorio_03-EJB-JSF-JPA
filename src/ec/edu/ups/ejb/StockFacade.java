@@ -21,34 +21,25 @@ public class StockFacade extends AbstractFacade<Stock> {
     }
 
     public Stock recuperarStock(Producto producto, Bodega bodega){
-        System.out.println("heree");
+        
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
         CriteriaQuery<Stock> criteriaQuery= criteriaBuilder.createQuery(Stock.class);
-        System.out.println("heree222" );
+       
         Root<Stock> usuarioRoot= criteriaQuery.from(Stock.class);
-        System.out.println("heree333");
         Predicate predicate= criteriaBuilder.equal(usuarioRoot.get("producto"),producto);
-        System.out.println("heree4");
         Predicate predicate1= criteriaBuilder.equal(usuarioRoot.get("bodega"),bodega);
         Predicate validaciones= criteriaBuilder.and(predicate,predicate1);
-        System.out.println("heree5");
         criteriaQuery.select(usuarioRoot).where(validaciones);
-        System.out.println("heree6");
-        System.out.println(entityManager.createQuery(criteriaQuery).getSingleResult().getStock());
         return entityManager.createQuery(criteriaQuery).getSingleResult();
 
     }
     public List<Stock> recuperarStockPorBodega(Bodega bodega){
-        System.out.println("heree");
+     
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
         CriteriaQuery<Stock> criteriaQuery= criteriaBuilder.createQuery(Stock.class);
-        System.out.println("heree222" );
         Root<Stock> usuarioRoot= criteriaQuery.from(Stock.class);
-        System.out.println("heree333");
         Predicate predicate= criteriaBuilder.equal(usuarioRoot.get("bodega"),bodega);
-        System.out.println("heree5");
         criteriaQuery.select(usuarioRoot).where(predicate);
-        System.out.println("heree6");
         return entityManager.createQuery(criteriaQuery).getResultList();
 
     }

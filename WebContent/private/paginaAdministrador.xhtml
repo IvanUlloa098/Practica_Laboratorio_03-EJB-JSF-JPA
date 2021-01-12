@@ -82,16 +82,42 @@
 
     </h:form >
     
-
-    <h:dataTable  style="width: 37%; height:200px;margin-top: 2%;" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
+<h1 >Categorias:</h1>
+    <h:dataTable  style="width: 37%; height:200px;margin-top: 2%; background-color:darkseagreen" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
                   headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
         <h:column>
             <f:facet name="header">Nombre</f:facet>
             <h:outputText value="#{c.nombre}"  />
+            
         </h:column>
     </h:dataTable>
+    <h1 >Productos:</h1>
+     <h:dataTable  style="width: 37%; height:200px;margin-top: 2%;background-color:darkseagreen" value="#{productoBean.productos}" var="p" styleClass="table table-dark table-striped"
+                  headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
+        <h:column>
+            <f:facet name="header">Nombre</f:facet>
+            <h:outputText value="#{p.nombre}"  />
+           
+            
+        </h:column>
+          <h:column>
+        
+           <f:facet name="header">PrecioCompra</f:facet>
+            <h:outputText value="#{p.precioCompra}"  />
+            
+        </h:column>
+          <h:column>
+        
+           <f:facet name="header">PrecioVenta</f:facet>
+            <h:outputText value="#{p.precioCompra}"  />
+            
+        </h:column>
+          
+            
+          
+    </h:dataTable>
     <h:form>
-        <h:outputText value="Agregar a Stock" style="float: left; background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
+        <h:outputText value="Agregar a Stock" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
 
         <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedProducto}" style="margin-right: 5%;">
             <f:selectItems  value="#{productoBean.productos}" var="producto" itemValue="#{producto.nombre}" itemLabel="#{producto.nombre}" pt:styleClass="dropdown-item"/>
@@ -105,8 +131,8 @@
             <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>    
         </h:selectOneMenu>
 
-        <h:commandButton action="#{productoBean.aumentarStock}"
-                         value="Actualizar" class="btn btn-primary" style="margin-left: 3%;width: 25%;margin-top: 5%"></h:commandButton>
+        <h:commandButton
+                         value="Actualizar" class="btn btn-primary" style="margin-left: 63%;width: 25%;margin-top: 5%"></h:commandButton>
 
     </h:form>
     <h:form>
@@ -115,10 +141,10 @@
                 <f:selectItems value="#{productoBean.bodegas}" var="bodega" itemValue="#{bodega.nombre}" itemLabel="#{bodega.nombre}" pt:styleClass="dropdown-item"/>
                 <f:ajax render ="idList2 idList3 tabla" event="change" />
             </h:selectOneMenu>
-            <br />Disponibilidad:
+            <br /><h2>Disponibilidad</h2>
 
-            <h:dataTable  value="#{productoBean.productos_list}" var="c" styleClass="table table-dark table-striped"
-                          headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style=" width: 35%; margin-top: 2%; " id="tabla">
+            <h:dataTable   value="#{productoBean.productos}" var="c" styleClass="table table-dark table-striped"
+                          headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style=" width: 35%; margin-top: 2%;background-color:darkseagreen " id="tabla">
 
                 <h:column>
                     <f:facet name="header">Nombre</f:facet>
