@@ -230,11 +230,11 @@ public class ProductoBean implements Serializable{
                 Stock stock = new Stock(Integer.parseInt(stock_val),s1,a1);
                 a1.agregarProducto(s1);
                 a1.addStock(stock);
-                System.out.println("s");
+                System.out.println("stock");
                 s1.addBodega(a1);
-                System.out.println("akifinal");
+                System.out.println("bodega");
                 s1.addStock(stock);
-                System.out.println("salio bien mijin");
+                System.out.println("insertado!!");
             } else {
                 System.out.println("el objeto es nulo");
             }
