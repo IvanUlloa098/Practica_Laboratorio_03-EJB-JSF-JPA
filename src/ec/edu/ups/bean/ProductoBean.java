@@ -50,6 +50,7 @@ public class ProductoBean implements Serializable{
     private String selectedProducto;
     private String stock_mas;
     private List<String> bodegas_stock;
+    private String bodega_stock;
     //atributo para consultar inventario
     private String bodega_inventario ;
     private List<Producto> productos_list;
@@ -72,7 +73,15 @@ public class ProductoBean implements Serializable{
 
     }
 
-    public boolean isDisabled() {
+    public String getBodega_stock() {
+		return bodega_stock;
+	}
+
+	public void setBodega_stock(String bodega_stock) {
+		this.bodega_stock = bodega_stock;
+	}
+
+	public boolean isDisabled() {
         return disabled;
     }
 
@@ -241,22 +250,26 @@ public class ProductoBean implements Serializable{
         }
         ejbProductoFacade.create(s1);
     }
+    
     public void aumentarStock(){
         //Buscar el producto
         Producto product=ejbProductoFacade.buscarPrductoPorNombre(selectedProducto);
         if(product!=null)
             System.out.println("PRODUCTO ENCONTRADO");
         //Buscar la Bodega
-        Bodega bodeg= ejbBodegaFacade.buscarBodegaPorNombre(bodegas_stock.get(0));
+        Bodega bodeg= ejbBodegaFacade.buscarBodegaPorNombre(this.bodega_stock);
         if(bodeg!=null)
             System.out.println("BODEGA ENCONTRADO");
         //Actualizar entidad Stock
+        System.out.println(product.getCodigo());
         Stock stock_actualizar = ejbStockFacade.recuperarStock(product,bodeg);
+        System.out.println("!!!!!");
         stock_actualizar.setStock(Integer.parseInt(stock_mas));
         if(stock_actualizar!=null)
             System.out.println("STOCK ENCONTRADO");
         ejbStockFacade.edit(stock_actualizar);
     }
+    
     public List<Producto> consultarInventarioPorBodega(){
         
         if(bodega_inventario!=null){
@@ -288,6 +301,7 @@ public class ProductoBean implements Serializable{
 
         }
     }
+    
     public String getCookie() {
         Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
         if(cookie !=null) {

@@ -34,6 +34,7 @@ public class StockFacade extends AbstractFacade<Stock> {
         System.out.println("heree5");
         criteriaQuery.select(usuarioRoot).where(validaciones);
         System.out.println("heree6");
+        System.out.println(entityManager.createQuery(criteriaQuery).getSingleResult().getStock());
         return entityManager.createQuery(criteriaQuery).getSingleResult();
 
     }

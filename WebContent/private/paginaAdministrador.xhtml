@@ -101,10 +101,9 @@
         <h:inputText id="stock_mas" value="#{productoBean.stock_mas}" style="width: 30%;float: left"></h:inputText>
         <h:message for="stock_mas"></h:message>
 
-        <h:selectManyMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.bodegas_stock}" style="height: 30px;">
-            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}">
-            </f:selectItems>
-        </h:selectManyMenu>
+        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.bodega_stock}" style="margin-right: 5%;">
+            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>    
+        </h:selectOneMenu>
 
         <h:commandButton action="#{productoBean.aumentarStock}"
                          value="Actualizar" class="btn btn-primary" style="margin-left: 3%;width: 25%;margin-top: 5%"></h:commandButton>

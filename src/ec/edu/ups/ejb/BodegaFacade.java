@@ -22,7 +22,7 @@ public class BodegaFacade extends AbstractFacade<Bodega>{
     }
 
     public Bodega buscarBodegaPorNombre(String nombre){
-        System.out.println("Bodega buscada"+nombre);
+        System.out.println("Bodega buscada "+nombre);
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
         CriteriaQuery<Bodega> criteriaQuery= criteriaBuilder.createQuery(Bodega.class);
         Root<Bodega> categoriaRoot= criteriaQuery.from(Bodega.class);
