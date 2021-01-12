@@ -28,6 +28,7 @@ public class StockFacade extends AbstractFacade<Stock> {
         Root<Stock> usuarioRoot= criteriaQuery.from(Stock.class);
         Predicate predicate= criteriaBuilder.equal(usuarioRoot.get("producto"),producto);
         Predicate predicate1= criteriaBuilder.equal(usuarioRoot.get("bodega"),bodega);
+        System.out.println("mark 1");
         Predicate validaciones= criteriaBuilder.and(predicate,predicate1);
         criteriaQuery.select(usuarioRoot).where(validaciones);
         return entityManager.createQuery(criteriaQuery).getSingleResult();

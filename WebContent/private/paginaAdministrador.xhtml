@@ -69,16 +69,14 @@
         <br></br><br></br>
 
         <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.categoria}" style="margin-right: 15%;">
-            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.nombre}" itemLabel="#{categoria.nombre}" pt:styleClass="dropdown-item"/>
+            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}" pt:styleClass="dropdown-item"/>
         </h:selectOneMenu>
 
-        <h:selectManyMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodegas}" style="height: 30px;">
-            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}">
-            </f:selectItems>
-        </h:selectManyMenu>
+        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 15%;">
+            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>
+        </h:selectOneMenu>
 
-        <h:commandButton action="#{productoBean.addProducto}"
-                         value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
+        <h:commandButton action="#{productoBean.addProducto}" value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
 
     </h:form >
     
@@ -109,7 +107,7 @@
           <h:column>
         
            <f:facet name="header">PrecioVenta</f:facet>
-            <h:outputText value="#{p.precioCompra}"  />
+            <h:outputText value="#{p.precioVenta}"  />
             
         </h:column>
           
@@ -120,7 +118,7 @@
         <h:outputText value="Agregar a Stock" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
 
         <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedProducto}" style="margin-right: 5%;">
-            <f:selectItems  value="#{productoBean.productos}" var="producto" itemValue="#{producto.nombre}" itemLabel="#{producto.nombre}" pt:styleClass="dropdown-item"/>
+            <f:selectItems  value="#{productoBean.productos}" var="producto" itemValue="#{producto.codigo}" itemLabel="#{producto.nombre}" pt:styleClass="dropdown-item"/>
         </h:selectOneMenu>
 
         <h:outputText value="Ingrese la Cantidad a ingresar:" style="float: left; background-color: dimgrey; color: #f0f8ff;font-style: inherit;font-size: 20px;display: block;width: 30%;"/>
@@ -128,11 +126,10 @@
         <h:message for="stock_mas"></h:message>
 
         <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.bodega_stock}" style="margin-right: 5%;">
-            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.nombre}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>    
+            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>    
         </h:selectOneMenu>
 
-        <h:commandButton
-                         value="Actualizar" class="btn btn-primary" style="margin-left: 63%;width: 25%;margin-top: 5%"></h:commandButton>
+        <h:commandButton action="#{productoBean.aumentarStock}" value="Actualizar" class="btn btn-primary" style="margin-left: 63%;width: 25%;margin-top: 5%"></h:commandButton>
 
     </h:form>
     <h:form>

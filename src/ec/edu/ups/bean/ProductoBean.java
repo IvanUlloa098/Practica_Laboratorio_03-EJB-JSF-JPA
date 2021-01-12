@@ -39,7 +39,7 @@ public class ProductoBean implements Serializable{
     private String categoria;
     private List<Categoria> list;
     private List<Bodega> bodegas;
-    private List<String> selectedbodegas;
+    private String selectedbodega;
     @EJB
     private BodegaFacade ejbBodegaFacade;
 
@@ -57,6 +57,7 @@ public class ProductoBean implements Serializable{
     private boolean disabled=true;
     @EJB
     private StockFacade ejbStockFacade;
+    
     private String cookie;
 
 
@@ -140,15 +141,15 @@ public class ProductoBean implements Serializable{
         this.bodegas = bodegas;
     }
 
-    public List<String> getSelectedbodegas() {
-        return selectedbodegas;
-    }
+    public String getSelectedbodega() {
+		return selectedbodega;
+	}
 
-    public void setSelectedbodegas(List<String> selectedbodegas) {
-        this.selectedbodegas = selectedbodegas;
-    }
+	public void setSelectedbodega(String selectedbodega) {
+		this.selectedbodega = selectedbodega;
+	}
 
-    public Categoria[] getList() {
+	public Categoria[] getList() {
         return list.toArray(new Categoria[0]);
     }
 
@@ -226,48 +227,48 @@ public class ProductoBean implements Serializable{
 
         List<Bodega> bodegas_buscadas = new ArrayList<Bodega>();
 
-        Categoria categoria_buscada = ejbCategoriaFacade.buscarCategoriaPorNombre(categoria);
-        System.out.println("aki");
-        Producto s1 = new Producto(nombre, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, Integer.parseInt(stock), categoria_buscada);
-        System.out.println("aki2");
-        System.out.println("aki3");
+        System.out.println(">>>>>>>>> "+categoria);
+        Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
+        Producto s1 = new Producto(nombre, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, 1, categoria_buscada);
 
-        for (String bodega_name : selectedbodegas) {
-            String stock_val=this.stock;
-            Bodega a1 = ejbBodegaFacade.buscarBodegaPorNombre(bodega_name);
-            if (a1 != null) {
-                Stock stock = new Stock(Integer.parseInt(stock_val),s1,a1);
-                a1.agregarProducto(s1);
-                a1.addStock(stock);
-                System.out.println("stock");
-                s1.addBodega(a1);
-                System.out.println("bodega");
-                s1.addStock(stock);
-                System.out.println("insertado!!");
-            } else {
-                System.out.println("el objeto es nulo");
-            }
-        }
-        ejbProductoFacade.create(s1);
+        String stock_val=this.stock;
+        System.out.println(">>>>>>>>> "+selectedbodega);
+        Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
+        
+        if (a1 != null) {
+            Stock stock = new Stock(Integer.parseInt(stock_val),s1,a1);
+            a1.agregarProducto(s1);
+            a1.addStock(stock);
+            s1.addBodega(a1);
+            ejbProductoFacade.create(s1);
+            ejbStockFacade.create(stock);
+            System.out.println("insertado!!");
+        } else {
+            System.out.println("el objeto es nulo");
+        } 
+        
     }
     
     public void aumentarStock(){
         //Buscar el producto
-        Producto product=ejbProductoFacade.buscarPrductoPorNombre(selectedProducto);
-        if(product!=null)
-            System.out.println("PRODUCTO ENCONTRADO");
+        Producto product=ejbProductoFacade.find(Integer.parseInt(selectedProducto));
+        System.out.println("PRODUCTO ENCONTRADO");
         //Buscar la Bodega
-        Bodega bodeg= ejbBodegaFacade.buscarBodegaPorNombre(this.bodega_stock);
-        if(bodeg!=null)
-            System.out.println("BODEGA ENCONTRADO");
+        Bodega bodeg= ejbBodegaFacade.find(Integer.parseInt(this.bodega_stock));
+        System.out.println("BODEGA ENCONTRADO");
         //Actualizar entidad Stock
         System.out.println(product.getCodigo());
-        Stock stock_actualizar = ejbStockFacade.recuperarStock(product,bodeg);
-        System.out.println("!!!!!");
-        stock_actualizar.setStock(Integer.parseInt(stock_mas));
-        if(stock_actualizar!=null)
+        
+        try {
+        	Stock stock_actualizar = ejbStockFacade.recuperarStock(product,bodeg);
+            stock_actualizar.setStock(stock_actualizar.getStock()+Integer.parseInt(stock_mas));
             System.out.println("STOCK ENCONTRADO");
-        ejbStockFacade.edit(stock_actualizar);
+            ejbStockFacade.edit(stock_actualizar);
+		} catch (Exception e) {
+			Stock stock = new Stock(Integer.parseInt(stock_mas),product,bodeg);
+			ejbStockFacade.create(stock);
+		}    
+        
     }
     
     public List<Producto> consultarInventarioPorBodega(){
