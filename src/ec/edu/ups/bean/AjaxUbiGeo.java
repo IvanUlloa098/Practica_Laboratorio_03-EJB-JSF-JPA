@@ -5,6 +5,7 @@ package ec.edu.ups.bean;
 //import ups.edu.ec.http.OnHttpRequestComplete;
 //import ups.edu.ec.http.Response;
 
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
