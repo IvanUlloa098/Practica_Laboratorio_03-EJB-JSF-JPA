@@ -1,10 +1,11 @@
 package ec.edu.ups.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ec.edu.ups.ejb.BodegaFacade;
+import ec.edu.ups.ejb.CiudadFacade;
+import ec.edu.ups.ejb.PaisFacade;
+import ec.edu.ups.ejb.ProvinciaFacade;
+import ec.edu.ups.entidad.*;
+import ec.edu.ups.http.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -12,14 +13,13 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.annotation.FacesConfig;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-
-import org.glassfish.grizzly.http.Cookie;
-
-import ec.edu.ups.ejb.*;
-import ec.edu.ups.entidad.Bodega;
-import ec.edu.ups.entidad.Ciudad;
-import ec.edu.ups.entidad.Pais;
-import ec.edu.ups.entidad.Provincia;
+import javax.management.openmbean.OpenMBeanConstructorInfoSupport;
+import javax.servlet.http.Cookie;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @FacesConfig(version = FacesConfig.Version.JSF_2_3)
 @Named
@@ -47,7 +47,7 @@ public class BodegaBean implements Serializable {
     private boolean level2ListDisabled = true, level3ListDisabled = true;
     private Map<String, String> paises;
     private String codePais;
-    private String apiKey="2bc544a252b49c53bf13d753815473cd";
+    private String apiKey="ce6a8d0732c613a7791b2d19df7cb656";
 
 
     public BodegaBean(){
@@ -79,14 +79,15 @@ public class BodegaBean implements Serializable {
 
     public String add (){//pedro
         String [] paisProCiu=this.level3.split("-");
-        Pais pais = paisFacade.find("EC");
+        Pais pais = paisFacade.find("Ecuador");
+        
         /*POR DEFECTO VOY A USAR EL PAIS DE ECUADOR*/
         Provincia provincia=consultarProvincia(paisProCiu[1].toUpperCase(),pais);
         Ciudad ciudad =consultarCiudad(paisProCiu[2].toUpperCase(),provincia);
         this.ejbBodegaFacade.create(new Bodega(this.nombre.toUpperCase(),ciudad));
         /*limipeza de campos*/
         this.nombre="";
-        this.level1="---Elige---";
+       this.level1="---Elige---";
         this.level3="---Elige---";
         this.bodegas=this.ejbBodegaFacade.findAll();
         return  null;
@@ -139,7 +140,7 @@ public class BodegaBean implements Serializable {
 
     public void actualizarBodega(){
         String [] paisProCiu=this.level3.split("-");
-        Pais pais = paisFacade.find("EC");
+        Pais pais = paisFacade.find("Ecuador");
         Provincia provincia=consultarProvincia(paisProCiu[1].toUpperCase(),pais);
         Ciudad ciudad =consultarCiudad(paisProCiu[2].toUpperCase(),provincia);
         this.bodega.setCiudad(ciudad);
@@ -230,7 +231,7 @@ public class BodegaBean implements Serializable {
         ArrayList<String> paisesf=new ArrayList<String>();
         paisesf.add("---Elige---");
 
-       /* HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
+        HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
             public void onComplete(Response status) {
                 if (status.isSuccess()) {
@@ -240,7 +241,7 @@ public class BodegaBean implements Serializable {
                     pedro = pedro.substring(0, pedro.length() - 1);
                     String[] p = pedro.split("}");
 
-                    
+                    /* Paises */
                     paises=new HashMap<>();
                     for (String pp : p) {
                         pp = pp.substring(9, pp.length());
@@ -259,7 +260,7 @@ public class BodegaBean implements Serializable {
             }
         });
 
-        cliente.excecute("http://battuta.medunes.net/api/country/all/?key="+apiKey);*/
+        cliente.excecute("http://battuta.medunes.net/api/country/all/?key="+apiKey);
         return paisesf;
     }
 
@@ -268,7 +269,7 @@ public class BodegaBean implements Serializable {
 
         ArrayList<String> provincias=new ArrayList<String>();
         provincias.add("---Elige---");
-       /* HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
+        HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
             public void onComplete(Response status) {
                 if (status.isSuccess()) {
@@ -293,7 +294,7 @@ public class BodegaBean implements Serializable {
             }
         });
         this.codePais=paises.get(pais);
-        cliente.excecute("http://battuta.medunes.net/api/region/"+this.codePais+"/all/?key="+apiKey);*/
+        cliente.excecute("http://battuta.medunes.net/api/region/"+this.codePais+"/all/?key="+apiKey);
         return provincias;
     }
 
@@ -301,7 +302,7 @@ public class BodegaBean implements Serializable {
 
         ArrayList<String> ciudades=new ArrayList<String>();
         ciudades.add("---Elige---");
-       /* HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
+        HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
             public void onComplete(Response status) {
                 if (status.isSuccess()) {
@@ -326,7 +327,7 @@ public class BodegaBean implements Serializable {
         });
         String[] provinciaF=provincia.split(" ");
 
-        cliente.excecute("http://battuta.medunes.net/api/city/"+this.codePais+"/search/?region="+provinciaF[provinciaF.length-1]+"&key="+apiKey);*/
+        cliente.excecute("http://battuta.medunes.net/api/city/"+this.codePais+"/search/?region="+provinciaF[provinciaF.length-1]+"&key="+apiKey);
         return ciudades;
     }
 
@@ -392,4 +393,3 @@ public class BodegaBean implements Serializable {
     }
 
 }
-
