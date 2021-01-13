@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.annotation.FacesConfig;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpSession;
 import ec.edu.ups.ejb.*;
 import ec.edu.ups.entidad.Bodega;
 import ec.edu.ups.entidad.Categoria;
+import ec.edu.ups.entidad.Ciudad;
+import ec.edu.ups.entidad.Pais;
 import ec.edu.ups.entidad.Producto;
+import ec.edu.ups.entidad.Provincia;
 import ec.edu.ups.entidad.Stock;
 
 //Activates CDI build-in beans
@@ -30,6 +34,7 @@ public class ProductoBean implements Serializable{
     private static final long serialVersionUID=1L;
     @EJB
     private ProductoFacade ejbProductoFacade;
+    private int codigoProducto;
     private String nombre;
     private String imagen;
     private String precioCompra;
@@ -45,7 +50,6 @@ public class ProductoBean implements Serializable{
 
     @EJB
     private CategoriaFacade ejbCategoriaFacade;
-
     private List<Producto> productos;
     private String selectedProducto;
     private String stock_mas;
@@ -59,6 +63,9 @@ public class ProductoBean implements Serializable{
     private StockFacade ejbStockFacade;
     
     private String cookie;
+    private Producto producto;
+    String nombreProducto;
+    
 
 
 
@@ -98,9 +105,24 @@ public class ProductoBean implements Serializable{
         this.bodega_inventario = bodega_inventario;
         this.disabled=false;
     }
+    
+    public String getNombreProducto() {
+		return nombreProducto;
+	}
 
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
+	}
 
-    public List<String> getBodegas_stock() {
+	public int getCodigoProducto() {
+		return codigoProducto;
+	}
+
+	public void setCodigoProducto(int codigoProducto) {
+		this.codigoProducto = codigoProducto;
+	}
+
+	public List<String> getBodegas_stock() {
         return bodegas_stock;
     }
 
@@ -220,12 +242,76 @@ public class ProductoBean implements Serializable{
     public void setProductos_list(List<Producto> productos_list) {
         this.productos_list = productos_list;
     }
+    
+    //Metodos de edicion de Producto
+    public String edit (Producto p){
+        p.setEditable(true);
+        return null;
+    }
+    
+    public void buscarProducto(int codigo){
+    	
+        this.producto=ejbProductoFacade.find(codigo);
+        this.nombreProducto=producto.getNombre();
+        this.codigoProducto=codigo;
+        this.precioCompra = ""+producto.getPrecioCompra();
+        this.precioVenta = ""+producto.getPrecioVenta();
+        this.iva = ""+producto.getIva();
+    }
+    
+    public void navegar(){
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaEdicionProducto.xhtml");
+    }
+    
+    public void actualizarProducto(){
+    	
+    	char iva_char;
+    	try {
+    		iva_char = iva.charAt(0);
+		} catch (Exception e) {
+			iva_char = 'S';
+		}
+    	
+    	String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hidden");
+    	
+        System.out.println(">>>>>>>>> "+value);
+        Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
+        Producto s1 = new Producto(Integer.parseInt(value), nombreProducto, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, 1, categoria_buscada);
+        Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
+        
+        a1.agregarProducto(s1);
+        s1.addBodega(a1);
+        ejbProductoFacade.edit(s1);
+        System.out.println("actualizado!!");
+        
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+    }
+    
+    public void eliminarProducto() {
+    	
+    	int value = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hidden"));
+    	    	
+    	this.producto=ejbProductoFacade.find(value);
+    	
+    	try {
+    		ejbProductoFacade.remove(this.producto);
+		} catch (Exception e) {
+			System.out.println("IMPOSIBLE ELIMINAR");
+		}
+    	
+    	FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+    	
+    }
 
+    //Agregar producto
     public void addProducto() {
 
-        char iva_char = iva.charAt(0);
-
-        List<Bodega> bodegas_buscadas = new ArrayList<Bodega>();
+    	char iva_char;
+    	try {
+    		iva_char = iva.charAt(0);
+		} catch (Exception e) {
+			iva_char = 'S';
+		}        
 
         System.out.println(">>>>>>>>> "+categoria);
         Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
@@ -236,12 +322,10 @@ public class ProductoBean implements Serializable{
         Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
         
         if (a1 != null) {
-            Stock stock = new Stock(Integer.parseInt(stock_val),s1,a1);
+        	
             a1.agregarProducto(s1);
-            a1.addStock(stock);
             s1.addBodega(a1);
             ejbProductoFacade.create(s1);
-            ejbStockFacade.create(stock);
             System.out.println("insertado!!");
         } else {
             System.out.println("el objeto es nulo");
@@ -324,43 +408,52 @@ public class ProductoBean implements Serializable{
         }
         return "Bienvenido!";
     }
-//FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaBodegas.xhtml")
-
- public void validar_usuario(){
-	HttpSession sesion = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getSession();
-	sesion.getAttribute("administrador");
-	boolean rol = (boolean) sesion.getAttribute("administrador");
-	 String correo = (String) sesion.getAttribute("correo");
+	//FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaBodegas.xhtml")
 	
-	if (correo==null && rol==false) {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("../public/logIn.xhtml");
+	 public void validar_usuario(){
+		HttpSession sesion = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getSession();
+		sesion.getAttribute("administrador");
+		boolean rol = (boolean) sesion.getAttribute("administrador");
+		 String correo = (String) sesion.getAttribute("correo");
+		
+		if (correo==null && rol==false) {
+			try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("../public/logIn.xhtml");
+			}
+		  catch (Exception e) {
+	          e.printStackTrace();
+		  }
 		}
-	  catch (Exception e) {
-          e.printStackTrace();
-	  }
-	}
- }
-
- public void deleteCookie(){
+	 }
+	
+	 public void deleteCookie(){
+	 
+	     FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("administrador", "empleado", null);
+	     Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
+	     if(cookie.getValue().equals("")) System.out.println("Se ha borrado la cookie de manera correcta!"); else
+	         System.out.println("Se ha nulificado el valor correctamente!");
+	     try {
+	         FacesContext.getCurrentInstance().getExternalContext().redirect("../public/paginaCatalogo.xhtml");
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     }
+	 }
  
-     FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("administrador", "empleado", null);
-     Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
-     if(cookie.getValue().equals("")) System.out.println("Se ha borrado la cookie de manera correcta!"); else
-         System.out.println("Se ha nulificado el valor correctamente!");
-     try {
-         FacesContext.getCurrentInstance().getExternalContext().redirect("../public/paginaCatalogo.xhtml");
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
- }
-    public void redirectBodegas(){
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaBodegas.xhtml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public void redirectBodegas(){
+	    try {
+	        FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaBodegas.xhtml");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void redirectProducto(){
+	    try {
+	        FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaProducto.xhtml");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 
   
       

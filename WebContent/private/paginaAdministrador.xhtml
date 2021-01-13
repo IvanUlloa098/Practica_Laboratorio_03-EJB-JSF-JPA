@@ -32,55 +32,17 @@
         <h:form>
             <h:commandLink/>
             <h:commandLink/>
+            <h:commandLink action="#{productoBean.redirectProducto}">Gestión Productos <i class='fab fa-codepen' style='font-size:24px'/></h:commandLink>
             <h:commandLink action="#{productoBean.redirectBodegas}">Administrar Bodegas <i class='fab fa-codepen' style='font-size:24px'/></h:commandLink>
-            <h:commandLink>Pedidos <i class='fas fa-address-card' style='font-size:24px'/></h:commandLink>
 
             <h:commandLink action="#{productoBean.deleteCookie}">Cerrar Sesion  <i class="fa fa-window-close" style="font-size:24px"/></h:commandLink>
         </h:form>
         <h:outputLabel value="#{productoBean.cookie}"/>
     </div>
-
-
-    <h:form style="float: left;width: 40%;margin-right: 10%;margin-left: 10%;margin-top: 4%;">
-        <h3 style="color:royalblue">Registro Producto</h3>
-        <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;"/>
-        <h:inputText id="nombre" value="#{productoBean.nombre}" style="width:80%;"></h:inputText>
-        <h:message for="nombre"></h:message>
-        <br></br><br></br>
-
-        <h:outputText value="precioCompra" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
-        <h:inputText id="precioCompra" value="#{productoBean.precioCompra}" style="width: 80%;"></h:inputText>
-        <h:message for="precioCompra"></h:message>
-        <br></br><br></br>
-
-        <h:outputText value="precioVenta" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
-        <h:inputText id="precioVenta" value="#{productoBean.precioVenta}" style="width: 80%;"></h:inputText>
-        <h:message for="precioVenta"></h:message>
-        <br></br><br></br>
-
-        <h:outputText value="IVA" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
-        <h:inputText id="iva" value="#{productoBean.iva}" style="width: 80%;"></h:inputText>
-        <h:message for="iva"></h:message>
-        <br></br><br></br>
-
-        <h:outputText value="stock" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
-        <h:inputText id="stock" value="#{productoBean.stock}" style="width: 80%;"></h:inputText>
-        <h:message for="stock"></h:message>
-        <br></br><br></br>
-
-        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.categoria}" style="margin-right: 15%;">
-            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}" pt:styleClass="dropdown-item"/>
-        </h:selectOneMenu>
-
-        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 15%;">
-            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}" pt:styleClass="dropdown-item"/>
-        </h:selectOneMenu>
-
-        <h:commandButton action="#{productoBean.addProducto}" value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
-
-    </h:form >
-    
-<h1 >Categorias:</h1>
+   
+   <div style="float: left;width: 40%;margin-right: 10%;margin-left: 10%;margin-top: 4%;">
+   
+   		<h1 >Categorias:</h1>
     <h:dataTable  style="width: 37%; height:200px;margin-top: 2%; background-color:darkseagreen" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
                   headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
         <h:column>
@@ -154,8 +116,8 @@
             </h:dataTable>
         </fieldset>
     </h:form>
-
-
+   
+   </div> 
 
 </h:body>
 </html>

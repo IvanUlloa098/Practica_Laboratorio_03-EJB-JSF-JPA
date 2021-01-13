@@ -40,6 +40,9 @@ public class Producto implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto")
     private List<Stock> lista_stock;
 
+    @Transient
+    private boolean editable;
+    
     public Producto(){
         bodegasList= new ArrayList<Bodega>();
         facturasDetallesList= new ArrayList<FacturaDetalle>();
@@ -48,6 +51,19 @@ public class Producto implements Serializable {
 
     public Producto(String nombre, String imagen, double precioCompra, double precioVenta, char iva, int stock,Categoria categoria) {
         this.nombre = nombre;
+        this.imagen = imagen;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
+        this.iva = iva;
+        this.stock = stock;
+        this.categoria = categoria;
+        bodegasList= new ArrayList<Bodega>();
+        lista_stock= new ArrayList<Stock>();
+    }
+    
+    public Producto(int codigo, String nombre, String imagen, double precioCompra, double precioVenta, char iva, int stock,Categoria categoria) {
+    	this.codigo = codigo;
+    	this.nombre = nombre;
         this.imagen = imagen;
         this.precioCompra = precioCompra;
         this.precioVenta = precioVenta;
@@ -83,7 +99,15 @@ public class Producto implements Serializable {
         this.facturasDetallesList = facturasDetallesList;
     }
 
-    public int getCodigo() {
+    public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+	public int getCodigo() {
         return codigo;
     }
 
