@@ -57,7 +57,7 @@ public class ProductoBean implements Serializable{
     private String bodega_stock;
     //atributo para consultar inventario
     private String bodega_inventario ;
-    private List<Producto> productos_list;
+    private List<Producto> productos_bodega;
     private boolean disabled=true;
     @EJB
     private StockFacade ejbStockFacade;
@@ -66,9 +66,6 @@ public class ProductoBean implements Serializable{
     private Producto producto;
     String nombreProducto;
     
-
-
-
     public ProductoBean() {
 
     }
@@ -235,13 +232,14 @@ public class ProductoBean implements Serializable{
         this.categoria = categoria;
     }
 
-    public List<Producto> getProductos_list() {
+    public List<Producto> getProductos_bodega() {
         return consultarInventarioPorBodega();
     }
 
-    public void setProductos_list(List<Producto> productos_list) {
-        this.productos_list = productos_list;
+    public void setProductos_bodega(List<Producto> productos_list) {
+        this.productos_bodega = productos_list;
     }
+    
     
     //Metodos de edicion de Producto
     public String edit (Producto p){
@@ -331,6 +329,8 @@ public class ProductoBean implements Serializable{
             System.out.println("el objeto es nulo");
         } 
         
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+        
     }
     
     public void aumentarStock(){
@@ -351,22 +351,25 @@ public class ProductoBean implements Serializable{
 		} catch (Exception e) {
 			Stock stock = new Stock(Integer.parseInt(stock_mas),product,bodeg);
 			ejbStockFacade.create(stock);
-		}    
+		}   
+        
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaAdministrador.xhtml");
         
     }
     
     public List<Producto> consultarInventarioPorBodega(){
         
         if(bodega_inventario!=null){
-            Bodega bodega_to_inventario=ejbBodegaFacade.buscarBodegaPorNombre(bodega_inventario);
+            Bodega bodega_to_inventario=ejbBodegaFacade.buscarBodegaPorNombre(Integer.parseInt(bodega_inventario));
             if(bodega_to_inventario!=null)
                 System.out.println("bodega encontrada");
+            
             List<Stock> stock_inventario= ejbStockFacade.recuperarStockPorBodega(bodega_to_inventario);
             if(bodega_to_inventario!=null)
                 System.out.println("inventario encontrado");
             List<Producto> productos_inventario= new ArrayList<Producto>();
-            for (Stock stock_inv:stock_inventario
-            ) {
+            for (Stock stock_inv:stock_inventario) {
+            	
                 String codigo_prod_inv=stock_inv.getProducto().getNombre();
                 System.out.println("nombre del producto buscado "+codigo_prod_inv);
 
