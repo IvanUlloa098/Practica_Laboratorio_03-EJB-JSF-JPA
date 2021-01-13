@@ -1,6 +1,7 @@
 package ec.edu.ups.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class ProductoBean implements Serializable{
     //atributo para consultar inventario
     private String bodega_inventario ;
     private List<Producto> productos_bodega;
+    private List<Producto> productos_total;
     private boolean disabled=true;
     @EJB
     private StockFacade ejbStockFacade;
@@ -77,8 +79,15 @@ public class ProductoBean implements Serializable{
         productos= ejbProductoFacade.findAll();
 
     }
+    public List<Producto> getProductos_total() {
+		return listarProductosStockTotal();
+	}
 
-    public String getBodega_stock() {
+	public void setProductos_total(List<Producto> productos_total) {
+		this.productos_total = productos_total;
+	}
+
+	public String getBodega_stock() {
 		return bodega_stock;
 	}
 
@@ -379,6 +388,7 @@ public class ProductoBean implements Serializable{
                 System.out.println(producto_inv.toString());
                 productos_inventario.add(producto_inv);
             }
+            
             return productos_inventario;
         } else {
             Producto pr = new Producto();
@@ -388,6 +398,39 @@ public class ProductoBean implements Serializable{
             return productos_null;
 
         }
+    }
+    
+    public List<Producto> listarProductosStockTotal() {
+    	
+    	List<Producto> prTotal =  new ArrayList<Producto>();
+    	
+    	for (Producto p:productos) {
+    		
+    		p.setStock(this.consultarStockTotal(p));
+    		prTotal.add(p);
+    	}
+    	
+    	return prTotal;
+    }
+    
+    public Integer consultarStockTotal(Producto pr) {
+    	
+    	int st = 0;
+    	System.out.println("ENTAR EN consultarStockPorBodega");
+    	System.out.println(">> "+pr.getNombre());
+    	try {
+    		List<Stock> productos_null= ejbStockFacade.recuperarStockProducto(pr);
+            
+            for (Stock s: productos_null) {
+            	st = st + s.getStock();
+            }
+            
+		} catch (Exception e) {
+			System.out.println("NO HAY STOCK");
+		}
+    	
+    	System.out.println(">> "+st);
+        return st;
     }
     
     public String getCookie() {
