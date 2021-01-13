@@ -376,7 +376,7 @@ public class DetalleBean implements Serializable {
 
 	public void redirectPedido() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/private/paginaPedidos.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/private/paginaPedidos.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -384,7 +384,7 @@ public class DetalleBean implements Serializable {
 
 	public void anularFacturas() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/listarFacturas.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/listarFacturas.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -399,7 +399,7 @@ public class DetalleBean implements Serializable {
 		else
 			System.out.println("Se ha nulificado el valor correctamente!");
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/public/paginaCatalogo.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/public/paginaCatalogo.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

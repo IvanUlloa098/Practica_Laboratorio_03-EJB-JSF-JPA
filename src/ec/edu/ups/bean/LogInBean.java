@@ -79,7 +79,7 @@ public class LogInBean implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaAdministrador.xhtml");
                 }else {
                     createCookie(user.getCorreo(), false);
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/factura.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("../factura.xhtml");
                 }
             }catch (Exception e){e.printStackTrace();}
         }
