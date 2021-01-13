@@ -1,7 +1,5 @@
 package ec.edu.ups.bean;
-import ec.edu.ups.ejb.*;
 
-import ec.edu.ups.entidad.*;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -10,9 +8,18 @@ import javax.faces.annotation.FacesConfig;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.glassfish.grizzly.http.Cookie;
 
-import com.sun.rowset.internal.Row;
+import ec.edu.ups.ejb.FacturaCabeceraFacade;
+import ec.edu.ups.ejb.FacturaDetalleFacade;
+import ec.edu.ups.ejb.PersonaFacade;
+import ec.edu.ups.ejb.ProductoFacade;
+import ec.edu.ups.entidad.FacturaCabecera;
+import ec.edu.ups.entidad.FacturaDetalle;
+import ec.edu.ups.entidad.Persona;
+import ec.edu.ups.entidad.Producto;
+
+import javax.servlet.http.Cookie;
+
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
@@ -76,14 +83,16 @@ public class DetalleBean implements Serializable {
         producto = ejbProductoFacade.buscarProducto(name);
         if (producto.getStock() != 0){
             this.id=producto.getCodigo();
-            this.name = producto.getNombre();
+            
+this.name
+ = producto.getNombre();
             this.precio= producto.getPrecioVenta();
             this.subtotal=this.quantity*producto.getPrecioVenta();
             this.busqueda = "producto encontrado : stock : " + producto.getStock();
-           // this.list.add(new Row(id,name,quantity,precio,subtotal));
+            this.list.add(new Row(id,name,quantity,precio,subtotal));
             this.subtotalcabecera = 0.0;
             for(Row p: list){
-             //   subtotalcabecera = subtotalcabecera + p.getSubtotal();
+               subtotalcabecera = subtotalcabecera + p.getSubtotal();
             }
             this.descuento = 0.00;
             this.iva=subtotalcabecera * 0.12;
@@ -147,7 +156,9 @@ public class DetalleBean implements Serializable {
     }
 
     public void setId(int id) {
-        this.id = id;
+        
+this.id
+ = id;
     }
 
     public String getName() {
@@ -155,7 +166,9 @@ public class DetalleBean implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        
+this.name
+ = name;
     }
 
     public int getQuantity() {
@@ -315,22 +328,22 @@ public class DetalleBean implements Serializable {
 
 
         for(Row p: list){
-           // producto = ejbProductoFacade.find(p.getId());
+            producto = ejbProductoFacade.find(p.getId());
             disminuir = 0;
-          //  disminuir = producto.getStock()-p.getQuantity();
+            disminuir = producto.getStock()-p.getQuantity();
             producto.setStock(disminuir);
             ejbProductoFacade.edit(producto);
-          //  ejbFacturaDetalleFacade.create(new FacturaDetalle(p.getQuantity(),p.getSubtotal(),facturaCabecera,producto));
+            ejbFacturaDetalleFacade.create(new FacturaDetalle(p.getQuantity(),p.getSubtotal(),facturaCabecera,producto));
         }
         System.out.println("Se creo todos los detalles y se disminuyo el stock" );
 
         this.mensaje = "se ha creado exitosamente la factura";
     }
     public String save(Row t) {
-       // t.setEditable(false);
+        t.setEditable(false);
         this.subtotalcabecera = 0.0;
         for(Row p: list){
-        //    subtotalcabecera = subtotalcabecera + p.getSubtotal();
+           subtotalcabecera = subtotalcabecera + p.getSubtotal();
         }
         this.descuento = 0.00;
         this.iva=subtotalcabecera * 0.12;
@@ -341,7 +354,7 @@ public class DetalleBean implements Serializable {
         this.list.remove(t);
         this.subtotalcabecera = 0.0;
         for(Row p: list){
-          //  subtotalcabecera = subtotalcabecera + p.getSubtotal();
+          subtotalcabecera = subtotalcabecera + p.getSubtotal();
         }
         this.descuento = 0.00;
         this.iva=subtotalcabecera * 0.12;
