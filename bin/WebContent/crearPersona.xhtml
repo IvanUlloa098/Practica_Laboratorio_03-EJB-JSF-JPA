@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"/>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"/>
+</h:head>
+<nav class="navbar navbar-expand-md navbar-dark" style="background-color: black">
+<div>
+    <a href="" class="navbar-brand">tus bodegas.com </a>
+</div>
+
+<ul class="navbar-nav">
+    <li><a href="/Practica_Laboratorio_03-EJB-JSF-JPA/index.html" class="nav-link">Facturacion</a></li>
+</ul>
+</nav>
+<h:body style="background:blue">
+    <div class="container col-md-5">
+    <div class="card">
+    <div class="card-body">
+<br></br>
+    <h3> Crear Persona </h3>
+    <h:form id="form">
+        <h:outputLabel for="nombre" class="form-group" value="Cedula: "></h:outputLabel>
+        
+        <h:inputText id="nombre" class="form-group" value="#{detalleBean.cedula}"></h:inputText>
+        <br> </br>
+        <h:outputLabel for="salida" class="form-group" value="Nombre:" ></h:outputLabel>
+        
+        <h:inputText id="salida" class="form-group" value="#{detalleBean.nombre}" />
+        <br> </br>
+        <h:outputLabel for="salida5" class="form-group"  value="Apellido:" ></h:outputLabel>
+        
+        <h:inputText id="salida5" class="form-group" value="#{detalleBean.apellido}" />
+        <br> </br>
+        <h:outputLabel for="salida3"  class="form-group" value="Telefono:" ></h:outputLabel>
+        
+        <h:inputText id="salida3" class="form-group" value="#{detalleBean.celular}" />
+        <br> </br>
+        <h:outputLabel for="salida4"  class="form-group" value="Direccion:" ></h:outputLabel>
+      
+        <h:inputText id="salida4"  class="form-group" value="#{detalleBean.direccion}" />
+        <br> </br>
+
+        <h:commandButton value="Crear Persona"  class="btn btn-success"  style="margin: 10px" action="#{detalleBean.crearPersona()}">
+            <f:ajax execute="nombre" render="mensaje" />
+        </h:commandButton>
+        <br/><br/>
+        <h:outputText id="mensaje" value="#{detalleBean.mensaje}"/>
+        <h:link value="Regresar Facturacion" outcome="factura.xhtml" />
+
+
+    </h:form>
+    </div>
+    </div>
+    </div>
+</h:body>
+</html>
