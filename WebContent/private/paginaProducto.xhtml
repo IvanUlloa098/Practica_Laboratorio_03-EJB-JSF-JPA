@@ -58,11 +58,11 @@
 
 <h:body styleClass="modal-body text-center">
 
-    <h3>Gestión de bodegas</h3>
+    <h3>Gestión de Productos</h3>
 
-    <h:form style="float: left;width: 40%;margin-right: 25%;margin-left: 32%;margin-top: 5%;">
+    <h:form >
 
-        <fieldset>
+        <fieldset style="float: left;width: 40%;margin-right: 25%;margin-left: 32%;margin-top: 5%;">
             <legend>Registro Producto</legend>
 			
 	        <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;"/>
@@ -96,11 +96,7 @@
 	        <h:commandButton action="#{productoBean.addProducto}" value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
         </fieldset>
 
-    </h:form>
-    
-    <div>
-    
-    	<h:dataTable value="#{productoBean.productos}" var="p" styleClass="table table-bordered table-hover">
+		<h:dataTable value="#{productoBean.productos}" var="p" styleClass="table table-bordered table-hover">
            
             <h:column>
                 <f:facet name="header">Nombre</f:facet>
@@ -133,9 +129,11 @@
             </h:column>
 
         </h:dataTable>
+
+    </h:form>
     
+    	
     
-    </div>
 </h:body>
 
 </html>

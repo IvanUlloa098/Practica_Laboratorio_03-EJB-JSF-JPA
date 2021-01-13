@@ -291,6 +291,12 @@ public class ProductoBean implements Serializable{
         ejbProductoFacade.edit(s1);
         System.out.println("actualizado!!");
         
+        this.nombreProducto = null;
+        this.nombre = null;
+        this.precioCompra = null;
+        this.precioVenta = null;
+        this.iva = null;
+        
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
     }
     
@@ -320,12 +326,12 @@ public class ProductoBean implements Serializable{
 			iva_char = 'S';
 		}        
 
-        System.out.println(">>>>>>>>> "+categoria);
+        //System.out.println(">>>>>>>>> "+categoria);
         Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
         Producto s1 = new Producto(nombre, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, 1, categoria_buscada);
 
         String stock_val=this.stock;
-        System.out.println(">>>>>>>>> "+selectedbodega);
+        //System.out.println(">>>>>>>>> "+selectedbodega);
         Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
         
         if (a1 != null) {
@@ -337,6 +343,11 @@ public class ProductoBean implements Serializable{
         } else {
             System.out.println("el objeto es nulo");
         } 
+        
+        nombre = null;
+        precioCompra = null;
+        precioVenta = null;
+        iva = null;
         
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
         
@@ -416,8 +427,8 @@ public class ProductoBean implements Serializable{
     public Integer consultarStockTotal(Producto pr) {
     	
     	int st = 0;
-    	System.out.println("ENTAR EN consultarStockPorBodega");
-    	System.out.println(">> "+pr.getNombre());
+    	//System.out.println("ENTAR EN consultarStockPorBodega");
+    	//System.out.println(">> "+pr.getNombre());
     	try {
     		List<Stock> productos_null= ejbStockFacade.recuperarStockProducto(pr);
             
@@ -429,7 +440,7 @@ public class ProductoBean implements Serializable{
 			System.out.println("NO HAY STOCK");
 		}
     	
-    	System.out.println(">> "+st);
+    	//System.out.println(">> "+st);
         return st;
     }
     
