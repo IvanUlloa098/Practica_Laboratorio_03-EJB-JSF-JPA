@@ -47,7 +47,7 @@ public class BodegaBean implements Serializable {
     private boolean level2ListDisabled = true, level3ListDisabled = true;
     private Map<String, String> paises;
     private String codePais;
-    private String apiKey="ce6a8d0732c613a7791b2d19df7cb656";
+    private String apiKey="4ddd12a869916be484c4ef8b97915bc5";
 
 
     public BodegaBean(){
@@ -87,8 +87,8 @@ public class BodegaBean implements Serializable {
         this.ejbBodegaFacade.create(new Bodega(this.nombre.toUpperCase(),ciudad));
         /*limipeza de campos*/
         this.nombre="";
-       this.level1="---Elige---";
-        this.level3="---Elige---";
+       this.level1="Seleccionar";
+        this.level3="Seleccionar";
         this.bodegas=this.ejbBodegaFacade.findAll();
         return  null;
     }
@@ -148,7 +148,7 @@ public class BodegaBean implements Serializable {
         this.ejbBodegaFacade.edit(this.bodega);
         this.bodegas=null;
         this.bodegas=ejbBodegaFacade.findAll();
-        this.level1="---Elige---";
+        this.level1="Seleccionar";
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaBodegas.xhtml");
     }
 
@@ -205,14 +205,14 @@ public class BodegaBean implements Serializable {
 
     public void setLevel1(String level1) {
         this.level1 = level1;
-        this.setLevel2("---Elige---");
-        this.level2ListDisabled = this.level1.equals("---Elige---");
+        this.setLevel2("Seleccionar");
+        this.level2ListDisabled = this.level1.equals("Seleccionar");
     }
 
     public void setLevel2(String level2) {
         this.level2 = level2;
-        this.setLevel3("---Elige---");
-        this.level3ListDisabled = this.level2.equals("---Elige---");
+        this.setLevel3("Seleccionar");
+        this.level3ListDisabled = this.level2.equals("Seleccionar");
     }
 
     public void setLevel3(String level3) {
@@ -222,14 +222,14 @@ public class BodegaBean implements Serializable {
     private ArrayList<String> generateList(String pre, int size) {
         //String[] list = new String[size];
         ArrayList<String> list=new ArrayList<String>();
-        list.add("---Elige---");
+        list.add("Seleccionar");
 
         return list;
     }
 
     private ArrayList<String> obtenerPaises() {
         ArrayList<String> paisesf=new ArrayList<String>();
-        paisesf.add("---Elige---");
+        paisesf.add("Seleccionar");
 
         HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
@@ -268,7 +268,7 @@ public class BodegaBean implements Serializable {
     private ArrayList<String> obtenerProvincias(String pais){
 
         ArrayList<String> provincias=new ArrayList<String>();
-        provincias.add("---Elige---");
+        provincias.add("Seleccionar");
         HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
             public void onComplete(Response status) {
@@ -301,7 +301,7 @@ public class BodegaBean implements Serializable {
     private ArrayList<String> obtenerCiudades(String provincia){
 
         ArrayList<String> ciudades=new ArrayList<String>();
-        ciudades.add("---Elige---");
+        ciudades.add("Seleccionar");
         HttpClient cliente = new HttpClient(new OnHttpRequestComplete() {
             @Override
             public void onComplete(Response status) {

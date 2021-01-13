@@ -84,7 +84,9 @@ public class DetalleBean implements Serializable {
         producto = ejbProductoFacade.buscarProducto(name);
         if (producto.getStock() != 0){
             this.id=producto.getCodigo();
-            this.name = producto.getNombre();
+            
+this.name
+ = producto.getNombre();
             this.precio= producto.getPrecioVenta();
             this.subtotal=this.quantity*producto.getPrecioVenta();
             this.busqueda = "producto encontrado : stock : " + producto.getStock();
@@ -155,7 +157,9 @@ public class DetalleBean implements Serializable {
     }
 
     public void setId(int id) {
-        this.id = id;
+        
+this.id
+ = id;
     }
 
     public String getName() {
@@ -163,7 +167,9 @@ public class DetalleBean implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        
+this.name
+ = name;
     }
 
     public int getQuantity() {
