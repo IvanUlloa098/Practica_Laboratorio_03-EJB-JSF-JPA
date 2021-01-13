@@ -65,14 +65,14 @@
     <div class="card-body">
 
     <h3> Factura</h3>
-    <h:form id="form">
+    <h:form id="form" style="float:left;margin-left:-329px;width:0px">
         <h:outputLabel class="form-group" for="nombre" value="Cedula: "></h:outputLabel>
         <h:inputText class="form-group" id="nombre" value="#{detalleBean.cedula}"></h:inputText>
 
         <h:commandButton class="btn btn-success" style="margin: 10px" value="BuscarPersona" action="#{detalleBean.mensaje()}">
             <f:ajax execute="nombre" render="mensaje salida salida2 salida3 salida4 salida5" />
         </h:commandButton>
-        <div class="alert alert-primary" role="alert">
+        <div class="alert alert-primary" role="alert" style="width:176px;">
             <h:outputText id="mensaje" value="#{detalleBean.mensaje}"/>
         </div>
         <p> </p>
@@ -90,16 +90,15 @@
         <h:commandButton   style="margin: 10px" class="btn btn-warning" value="Crear Persona" action="#{detalleBean.crearPersona()}">
         </h:commandButton>
 
-        <h:outputText id="crear" value="#{detalleBean.mensaje}"/>
+       
 
     </h:form>
 
     <h3>Detalle Factura</h3>
-    <h:form>
+    <h:form style="float:right; margin-left:45px;">
         <h:dataTable value="#{detalleBean.list}" var="o" styleClass="tabla"
                      headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
-            <h:column>
-                <f:facet name="header">Codigo</f:facet>#{o.id}</h:column>
+          
             <h:column>
                 <f:facet name="header">Descripcion</f:facet>
                 <h:inputText value="#{o.name}" size="10" rendered="#{o.editable}" />
@@ -112,7 +111,7 @@
                 <h:outputText value="#{o.quantity}" rendered="#{not o.editable}" />
             </h:column>
 
-            ///precio subtotal
+   
             <h:column>
                 <f:facet name="header">Precio</f:facet>
                 <h:inputText value="#{o.precio}" size="10" rendered="#{o.editable}" />
