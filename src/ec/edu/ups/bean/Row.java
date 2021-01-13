@@ -1,20 +1,23 @@
 package ec.edu.ups.bean;
 import java.io.Serializable;
 
+import ec.edu.ups.entidad.Producto;
+
 public class Row implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
+    private Producto producto;
     private String name;
     private int quantity;
     private double precio;
     private double subtotal;
     private boolean editable;
 
-    public Row(int id, String name, int quantity , double precio, double subtotal) {
+    public Row(int id, Producto producto, int quantity , double precio, double subtotal) {
 
         this.id = id;
-        this.name = name;
+        this.producto = producto;
         this.quantity = quantity;
         this.precio = precio;
         this.subtotal = subtotal;
@@ -23,12 +26,27 @@ public class Row implements Serializable {
     // getters & setters
     // hasCode & equals
 
+    public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Producto getProducto() {
+		return producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
+	}
+    
     public double getSubtotal() {
         return subtotal;
     }
-
-    public void setSubtotal(double subtotal) {
+    
+	public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -46,14 +64,6 @@ public class Row implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getQuantity() {
@@ -86,8 +96,11 @@ public class Row implements Serializable {
         return obj.hashCode() == this.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "Row [id=" + id + ", name=" + name + ", quantity=" + quantity + ", editable=" + editable + "]";
-    }
+	@Override
+	public String toString() {
+		return "Row [id=" + id + ", producto=" + producto + ", quantity=" + quantity + ", precio=" + precio
+				+ ", subtotal=" + subtotal + ", editable=" + editable + "]";
+	}
+
+    
 }

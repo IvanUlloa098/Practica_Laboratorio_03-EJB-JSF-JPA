@@ -202,6 +202,8 @@ public class Producto implements Serializable {
     public void addStock(Stock stock){
         this.lista_stock.add(stock);
     }
+    
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
