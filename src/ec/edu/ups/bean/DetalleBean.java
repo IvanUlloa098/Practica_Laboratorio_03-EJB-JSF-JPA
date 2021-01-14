@@ -317,7 +317,7 @@ public class DetalleBean implements Serializable {
 
         System.out.println("Esta es la persona a registar cedula :: " + this.cedula);
         GregorianCalendar c1 = (GregorianCalendar) GregorianCalendar.getInstance();
-        FacturaCabecera facturaCabecera = new FacturaCabecera(c1, 'N',this.descuento,this.subtotalcabecera,  this.iva,  this.totalpagar ,this.persona);
+        FacturaCabecera facturaCabecera = new FacturaCabecera(c1, 'N',this.descuento,this.subtotalcabecera,  this.iva,  this.totalpagar ,ejbPersonaFacade.find(this.cedula));
         ejbFacturaCabeceraFacade.create(facturaCabecera);
         System.out.println("Se ha creado una factura cabecera");
 

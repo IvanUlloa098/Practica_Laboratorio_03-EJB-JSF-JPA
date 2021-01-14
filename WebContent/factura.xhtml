@@ -40,12 +40,12 @@
 </h:head>
 <nav class="navbar navbar-expand-md navbar-dark" style="background-color: dimgray;">
     <div>
-        <a href="https://www.javaguides.net" class="navbar-brand">TusBodegas.com</a>
+        <a href="" class="navbar-brand">TusBodegas.com</a>
     </div>
     <h:form style="margin-left: 54%;">
     <ul class="navbar-nav" >
         <li>
-            <h:commandLink styleClass="nav-link" action="#{detalleBean.redirectPedido}">Pedidos</h:commandLink>
+            <h:commandLink styleClass="nav-link" action="#{detalleBean.redirectPedido}">Buscar Factura</h:commandLink>
         </li>
 
         <li>
@@ -189,13 +189,13 @@
 
             </h:column>
         </h:dataTable>
-        <ul>
+       
 
-            <li>Nombre:<h:inputText size="10" value="#{detalleBean.name}" /></li>
-            <li>Cantidad:<h:inputText size="10"
+            <h6>Nombre &nbsp;:<h:inputText size="10" value="#{detalleBean.name}" /></h6>
+            <h6>Cantidad:<h:inputText size="10"
                                       value="#{detalleBean.quantity}" />
-            </li>
-        </ul>
+            </h6>
+       
         <h:commandButton value="Buscar Producto" style="margin: 10px"  class="btn btn-success" action="#{detalleBean.add}" />
 
         <h:outputText id="producto" value="#{detalleBean.busqueda}"/>

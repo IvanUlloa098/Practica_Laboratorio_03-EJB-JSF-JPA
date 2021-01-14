@@ -21,43 +21,39 @@
     <h:outputLabel style="display: none" value="#{pedidoBean.cookie}"/>
     <div class="navbar navbar-light bg-light justify-content-between">
         <p:graphicImage value=""/>
-        <a class="navbar-brand">Pedidos</a>
+        <a class="navbar-brand">Buscar Factura</a>
+         <h:form id="form" style="float:left;width:0px">
+    
+        <p:outputLabel class="form-group" for="nombre" value="Cedula: "></p:outputLabel>
+        <p:inputText class="form-group" id="nombre" value="#{collectionBean.cedula}"></p:inputText>
+        
+        
+        <p:commandButton action="#{collectionBean.obtenerFactura()}" styleClass="btn btn-success" value="Buscar" ajax="true" update="cedu"/>
+         	
+  		  </h:form>
         <h:form>
             <h:commandLink action="#{pedidoBean.redirectFacturas}" styleClass="btn btn-success" value="Regresar!"/>
             <p:commandLink action="#{pedidoBean.cerrarSesion}" styleClass="btn btn-danger" style="margin-left: auto" value="Cerrar Sesion"/>
         </h:form>
     </div>
-    <h3>Pedidos</h3>
-    <h:outputText id="mensaje" value="#{pedidoBean.msj}" />
-    <h:form>
-        <h:dataTable value="#{pedidoBean.rowPedidos}" var="p"  styleClass="table table-bordered table-hover">
+    <h3>Facturas</h3>
+  
+    <h:form id="cedu">
+      <h:dataTable value="#{collectionBean.list}" var="c" styleClass="tabla"
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" >
+             <h:column>
+                <f:facet name="header">Codigo</f:facet>#{c.codigo}
+                </h:column>
             <h:column>
-                <f:facet name="header">Id</f:facet>#{p.pedido.codigo}</h:column>
-            <h:column>
-                <f:facet name="header">Estado</f:facet>
+                <f:facet name="header">Total A pagar</f:facet>#{c.total}
+                </h:column>
 
-                <h:outputText value="#{p.pedido.estado}" />
+            <h:column>
+                <f:facet name="header">Anulado</f:facet>#{c.anulado}
+                
             </h:column>
-            <h:column>
-                <f:facet name="header">Fecha Emision</f:facet>
-
-                <h:outputText value="#{pedidoBean.formatDate(p.pedido.fecha_emision)}"  />
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">Cambiar Estado</f:facet>
-                <h:selectOneMenu value="#{p.estadoSelect}" id="idRoles">
-                    <f:selectItems value="#{p.estados}"/>
-
-                </h:selectOneMenu>
-            </h:column>
-            <h:column>
-                <f:facet name="header">Accion</f:facet>
-                <h:commandLink value="Edit" action="#{pedidoBean.edit(p)}"  />
-
-            </h:column>
-
-        </h:dataTable>
+            
+       </h:dataTable>
     </h:form>
 </h:body>
 </html>
