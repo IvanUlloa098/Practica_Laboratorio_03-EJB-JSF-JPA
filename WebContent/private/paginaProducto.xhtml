@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+<h:head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"></script>
+	<script src='https://kit.fontawesome.com/a076d05399.js' type=""></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="style/style.css"/>
+
+    <title>Productos</title>
+	
+	<style type="">
+        h3{
+            margin-left: 5%;
+        }
+
+    </style>
+
+    <!--comentario-->
+    <script type="text/javascript">
+        function indicador(data) {
+            if (data.status == "begin")
+                document.getElementById("id5").style.display = "inline";
+            else if (data.status == "success")
+                document.getElementById("id5").style.display = "none";
+        }
+    </script>
+
+</h:head>
+
+<h:outputLabel value="#{bodegaBean.cookie}" style="display: none"/>
+
+<h:form>
+
+    <nav class="navbar navbar-expand-md navbar-dark" style="background-color: black; width: 100%">
+        <div>
+            <a href="https://www.javaguides.net" class="navbar-brand">TusBodegas.com </a>
+        </div>
+
+        <ul class="navbar-nav">
+            <li>
+                <h:commandLink class="nav-link" action="#{bodegaBean.regresar}" value="Regresar"/>
+            </li>
+        </ul>
+        
+    </nav>
+</h:form>
+
+<h:body styleClass="modal-body text-center" style="background:beige;">
+
+    <h3>Gestión de Productos</h3>
+
+    <h:form >
+
+        <fieldset style="float: left;width: 40%;margin-right: 25%;margin-left: 32%;margin-top: 1%;">
+            <legend>Registro Producto</legend>
+			
+	        <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;margin-left: 10%"/>
+	        <h:inputText id="nombre" value="#{productoBean.nombre}" style="width:80%;"></h:inputText>
+	        <h:message for="nombre"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="precioCompra" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%"/>
+	        <h:inputText id="precioCompra" value="#{productoBean.precioCompra}" style="width: 80%;"></h:inputText>
+	        <h:message for="precioCompra"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="precioVenta" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%"/>
+	        <h:inputText id="precioVenta" value="#{productoBean.precioVenta}" style="width: 80%;"></h:inputText>
+	        <h:message for="precioVenta"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="IVA" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%"/>
+	        <h:inputText id="iva" value="#{productoBean.iva}" style="width: 80%;"></h:inputText>
+	        <h:message for="iva"></h:message>
+	        <br></br><br></br>
+	
+	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.categoria}" style="margin-right: 15%;">
+	            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}"/>
+	        </h:selectOneMenu>
+	
+	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 1%;">
+	            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}"/>
+	        </h:selectOneMenu>
+	
+	        <h:commandButton action="#{productoBean.addProducto}" value="Registrar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton><br></br><br></br>
+        </fieldset>
+
+		<h:dataTable value="#{productoBean.productos}" var="p" styleClass="table table-bordered table-hover" style="background:azure;">
+           
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                <h:outputText value="#{p.nombre}" rendered="#{not p.editable}"/>
+            </h:column>
+
+
+            <h:column>
+                <f:facet name="header">Precio de Venta</f:facet>
+                <h:outputText value="#{p.precioVenta}" rendered="#{not p.editable}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Precio de Compra</f:facet>
+                <h:outputText value="#{p.precioCompra}" rendered="#{not p.editable}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">IVA</f:facet>
+                <h:outputText value="#{p.iva}" rendered="#{not p.editable}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Accion</f:facet>
+
+                <h:commandLink value="Editar Producto" action="#{productoBean.buscarProducto(p.codigo)}"
+                               styleClass="btn btn-primary">
+                    <f:actionListener binding="#{productoBean.navegar()}"/>
+                </h:commandLink>
+            </h:column>
+
+        </h:dataTable>
+
+    </h:form>
+    
+    	
+    
+</h:body>
+
+</html>

@@ -9,6 +9,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import com.sun.javafx.fxml.expression.Expression;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Stateless
@@ -28,11 +32,27 @@ public class StockFacade extends AbstractFacade<Stock> {
         Root<Stock> usuarioRoot= criteriaQuery.from(Stock.class);
         Predicate predicate= criteriaBuilder.equal(usuarioRoot.get("producto"),producto);
         Predicate predicate1= criteriaBuilder.equal(usuarioRoot.get("bodega"),bodega);
+        System.out.println("mark 1");
         Predicate validaciones= criteriaBuilder.and(predicate,predicate1);
         criteriaQuery.select(usuarioRoot).where(validaciones);
         return entityManager.createQuery(criteriaQuery).getSingleResult();
 
     }
+    
+    public List<Stock> recuperarStockProducto(Producto producto){
+        
+        CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
+        CriteriaQuery<Stock> criteriaQuery= criteriaBuilder.createQuery(Stock.class);
+       
+        Root<Stock> stockRoot= criteriaQuery.from(Stock.class);
+        Predicate predicate= criteriaBuilder.equal(stockRoot.get("producto"),producto);
+        
+        System.out.println("mark 1");
+        criteriaQuery.select(stockRoot).where(predicate);
+        return entityManager.createQuery(criteriaQuery).getResultList();
+
+    }
+    
     public List<Stock> recuperarStockPorBodega(Bodega bodega){
      
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();

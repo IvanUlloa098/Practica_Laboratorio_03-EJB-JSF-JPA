@@ -11,16 +11,20 @@ import ec.edu.ups.ejb.FacturaCabeceraFacade;
 import ec.edu.ups.ejb.FacturaDetalleFacade;
 import ec.edu.ups.ejb.PersonaFacade;
 import ec.edu.ups.ejb.ProductoFacade;
+import ec.edu.ups.ejb.StockFacade;
 import ec.edu.ups.entidad.FacturaCabecera;
 import ec.edu.ups.entidad.FacturaDetalle;
 import ec.edu.ups.entidad.Persona;
 import ec.edu.ups.entidad.Producto;
+import ec.edu.ups.entidad.Stock;
 
 import javax.servlet.http.Cookie;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -35,7 +39,7 @@ public class DetalleBean implements Serializable {
 	private String cookie;
 	private int id;
 	private String name;
-	private int quantity;
+	private String quantity;
 	private double precio;
 	private double subtotal;
 	private String busqueda;
@@ -58,6 +62,9 @@ public class DetalleBean implements Serializable {
 
 	@EJB
 	private FacturaDetalleFacade ejbFacturaDetalleFacade;
+	
+	@EJB
+    private StockFacade ejbStockFacade;
 
 	private Persona persona;
 	private String cedula;
@@ -74,31 +81,51 @@ public class DetalleBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		this.descuento = 0.0;
+		this.quantity = "0";
+		this.iva = 0.0;
+		this.list = new HashSet<Row>();
+		this.name = "";
+		this.subtotalcabecera = 0.0;
+		this.totalpagar = 0.0;
+		
 	}
 
-	public String add() {
-		producto = ejbProductoFacade.buscarProducto(name);
-		if (producto.getStock() != 0) {
-			this.id = producto.getCodigo();
+	public void add() {		
+		
+		try {
+			producto = ejbProductoFacade.buscarProducto(name);
+			producto.setStock(this.consultarStockTotal(producto));
+			System.out.println("NOMBRE >>> "+producto.getNombre());
+			System.out.println("CANTIDAD >>> "+quantity);
+			
+			if ((producto.getStock() != 0) && Integer.valueOf(this.quantity) > 0) {
+				this.id = producto.getCodigo();
 
-			this.name = producto.getNombre();
-			this.precio = producto.getPrecioVenta();
-			this.subtotal = this.quantity * producto.getPrecioVenta();
-			this.busqueda = "producto encontrado : stock : " + producto.getStock();
-			this.list.add(new Row(id, name, quantity, precio, subtotal));
-			this.subtotalcabecera = 0.0;
-			for (Row p : list) {
-				subtotalcabecera = subtotalcabecera + p.getSubtotal();
+				this.name = producto.getNombre();
+				this.precio = producto.getPrecioVenta();
+				this.subtotal = Integer.valueOf(this.quantity) * producto.getPrecioVenta();
+				this.busqueda = "producto encontrado : stock : " + producto.getStock();
+				this.list.add(new Row(id, producto, Integer.valueOf(this.quantity), precio, this.subtotal));
+				this.subtotalcabecera = 0.0;
+				
+				for (Row p : list) {
+					subtotalcabecera = subtotalcabecera + p.getSubtotal();
+				}
+				
+				System.out.println("SUBTOTAL >>> "+subtotalcabecera);
+				this.descuento = 0.00;
+				this.iva = subtotalcabecera * 0.12;
+				this.totalpagar = this.iva + subtotalcabecera;
+				
+			} else {
+				this.busqueda = "producto no encontrado : sin stock : ";
+
 			}
-			this.descuento = 0.00;
-			this.iva = subtotalcabecera * 0.12;
-			this.totalpagar = this.iva + subtotalcabecera;
-		} else
+		} catch (Exception e) {
 			this.busqueda = "producto no encontrado : sin stock : ";
-		{
-
 		}
-		return null;
+		
 	}
 
 	public String getBusqueda() {
@@ -164,11 +191,11 @@ public class DetalleBean implements Serializable {
 		this.name = name;
 	}
 
-	public int getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 
@@ -283,19 +310,47 @@ public class DetalleBean implements Serializable {
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
+    
+	//Consultar el stock de un producto
+    public Integer consultarStockTotal(Producto pr) {
+    	
+    	int st = 0;
+    	//System.out.println("ENTAR EN consultarStockPorBodega");
+    	//System.out.println(">> "+pr.getNombre());
+    	try {
+    		List<Stock> productos_null= ejbStockFacade.recuperarStockProducto(pr);
+            
+            for (Stock s: productos_null) {
+            	st = st + s.getStock();
+            }
+            
+		} catch (Exception e) {
+			System.out.println("NO HAY STOCK");
+		}
+    	
+    	//System.out.println(">> "+st);
+        return st;
+    }
 
 	// metodo para presentar si se encuentra la persona
 	public void mensaje() {
 		persona = ejbPersonaFacade.find(this.cedula);
-		if ("".equals(this.cedula) || !this.cedula.equals(persona.getCedula())) {
+		
+		try {
+			if ("".equals(this.cedula) || !this.cedula.equals(persona.getCedula())) {
+				this.mensaje = "no se encontro ningun usuario ";
+			} else {
+				this.mensaje = "usuario encontrado";
+				this.nombre = persona.getNombre();
+				this.apellido = persona.getApellido();
+				this.celular = persona.getTelefono();
+				this.direccion = persona.getDireccion();
+			}
+		} catch (Exception e) {
 			this.mensaje = "no se encontro ningun usuario ";
-		} else {
-			this.mensaje = "usuario encontrado";
-			this.nombre = persona.getNombre();
-			this.apellido = persona.getApellido();
-			this.celular = persona.getTelefono();
-			this.direccion = persona.getDireccion();
 		}
+		
+		
 	}
 
 	// metodo para registrar una persona a facturar
@@ -308,35 +363,102 @@ public class DetalleBean implements Serializable {
 		ejbPersonaFacade.create(persona);
 		this.mensaje = "usuario registrado exitosamente";
 	}
+	
+	//Disminuir stock por bodega
+	public boolean disminuirStock(Row r) {
+		
+		int aux;
+		int cant = r.getQuantity();
+		Stock st_aux = new Stock();		
+		boolean cent = false;
+		List<Stock> stock_producto= ejbStockFacade.recuperarStockProducto(r.getProducto());
+		System.out.println(">> INICIADO disminuirStock()");
+		
+		if (consultarStockTotal(r.getProducto())>=cant) {
+			for (Stock s : stock_producto) {
+				aux = cant;
+				cant = s.getStock()-cant;			
+				
+				if (cant < 0) {
+					st_aux = s;
+					cant = cant*(-1);
+					aux = aux-cant;
+					s.setStock(s.getStock()-(aux));
+					ejbStockFacade.edit(s);
+					
+				} else {
+					s.setStock(cant);
+					ejbStockFacade.edit(s);
+					cent = true;
+					break;
+				}
+			}
+			
+			if (cent==false) {
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> ERROR");
+				ejbStockFacade.edit(st_aux);
+			}
+			
+		} else {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> ERROR");
+		}
+		
+		return cent;
+		
+	}
 
 	public void crearFactura() {
+		
+		boolean cent=false;
+		
+		try {
+			
+			System.out.println("Esta es la persona a registar cedula :: " + this.cedula);
+			GregorianCalendar c1 = (GregorianCalendar) GregorianCalendar.getInstance();
+			FacturaCabecera facturaCabecera = new FacturaCabecera(c1, 'N', this.descuento, this.subtotalcabecera, this.iva,this.totalpagar, this.persona);
 
-		System.out.println("Esta es la persona a registar cedula :: " + this.cedula);
-		GregorianCalendar c1 = (GregorianCalendar) GregorianCalendar.getInstance();
-		FacturaCabecera facturaCabecera = new FacturaCabecera(c1, 'N', this.descuento, this.subtotalcabecera, this.iva,
-				this.totalpagar, this.persona);
-		ejbFacturaCabeceraFacade.create(facturaCabecera);
-		System.out.println("Se ha creado una factura cabecera");
-
-		for (Row p : list) {
-			producto = ejbProductoFacade.find(p.getId());
-			disminuir = 0;
-			disminuir = producto.getStock() - p.getQuantity();
-			producto.setStock(disminuir);
-			ejbProductoFacade.edit(producto);
-			ejbFacturaDetalleFacade
-					.create(new FacturaDetalle(p.getQuantity(), p.getSubtotal(), facturaCabecera, producto));
+			for (Row p : list) {
+				producto = p.getProducto();
+				cent = disminuirStock(p);
+				
+				if (cent==false) {
+					System.out.println(">> NO SE PUDO CAMBIAR EL STOCK");
+					break;
+				}
+				
+			}			
+			
+			if (cent==true) {
+				
+				ejbFacturaCabeceraFacade.create(facturaCabecera);
+				
+				for (Row p : list) {
+					producto = p.getProducto();
+					
+					ejbFacturaDetalleFacade.create(new FacturaDetalle(p.getQuantity(), p.getSubtotal(), facturaCabecera, producto));
+					
+				}					
+				
+				System.out.println(">> FACTURA CREATA EXITOSAMENTE");
+				this.init();
+				this.mensaje = "se ha creado exitosamente la factura";				
+				
+			} else {
+				this.mensaje = "no se pudo crear la factura";
+				
+			}
+			
+		} catch (Exception e) {
+			this.mensaje = "no se pudo crear la factura";
 		}
-		System.out.println("Se creo todos los detalles y se disminuyo el stock");
-
-		this.mensaje = "se ha creado exitosamente la factura";
+		
 	}
 
 	public String save(Row t) {
 		t.setEditable(false);
 		this.subtotalcabecera = 0.0;
 		for (Row p : list) {
-			subtotalcabecera = subtotalcabecera + p.getSubtotal();
+			subtotalcabecera = subtotalcabecera + p.getPrecio();
 		}
 		this.descuento = 0.00;
 		this.iva = subtotalcabecera * 0.12;
@@ -385,7 +507,10 @@ public class DetalleBean implements Serializable {
 
 	public void anularFacturas() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/listarFacturas.xhtml");
+			
+			
+			
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/private/listarFacturas.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -21,12 +21,12 @@ public class BodegaFacade extends AbstractFacade<Bodega>{
         super(Bodega.class);
     }
 
-    public Bodega buscarBodegaPorNombre(String nombre){
-        System.out.println("Bodega buscada"+nombre);
+    public Bodega buscarBodegaPorNombre(int codigo){
+        System.out.println("Bodega buscada "+codigo);
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
         CriteriaQuery<Bodega> criteriaQuery= criteriaBuilder.createQuery(Bodega.class);
         Root<Bodega> categoriaRoot= criteriaQuery.from(Bodega.class);
-        Predicate predicate= criteriaBuilder.equal(categoriaRoot.get("nombre"),nombre);
+        Predicate predicate= criteriaBuilder.equal(categoriaRoot.get("codigo"),codigo);
         criteriaQuery.select(categoriaRoot).where(predicate);
 
         return entityManager.createQuery(criteriaQuery).getSingleResult();

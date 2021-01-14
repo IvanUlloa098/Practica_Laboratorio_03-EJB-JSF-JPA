@@ -40,10 +40,10 @@
 </h:head>
 <nav class="navbar navbar-expand-md navbar-dark" style="background-color: dimgray;">
     <div>
-        <a href="" class="navbar-brand">TusBodegas.com</a>
+        <a href="https://www.javaguides.net" class="navbar-brand">TusBodegas.com</a>
     </div>
     <h:form style="margin-left: 54%;">
-    <ul class="navbar-nav" >
+    <ul class="navbar-nav">
         <li>
             <h:commandLink styleClass="nav-link" action="#{detalleBean.redirectPedido}">Buscar Factura</h:commandLink>
         </li>
@@ -58,7 +58,7 @@
     </ul>
     </h:form>
 </nav>
-<h:body style="background-image: url('https://www.transfiriendo.com/wp-content/uploads/2020/06/c03417ebf4f447610528b07a704e0540.gif');background-size:50%; background-repeat: no-repeat;background-position: 871px;">
+<h:body  style="background-image: url('https://www.transfiriendo.com/wp-content/uploads/2020/06/c03417ebf4f447610528b07a704e0540.gif');background-size:50%; background-repeat: no-repeat;background-position: 871px;">
     <h:outputLabel style="display: none" value="#{detalleBean.cookie}"/>
     <div class="container col-md-5">
     <div class="card">
@@ -67,33 +67,32 @@
     <h3> Factura</h3>
     <h2 style="margin-left:-65%">Crear Persona</h2>
     <h:form id="form" style="float:left;margin-left:-329px;width:0px">
-    
         <h:outputLabel class="form-group" for="nombre" value="Cedula: "></h:outputLabel>
         <h:inputText class="form-group" id="nombre" value="#{detalleBean.cedula}"></h:inputText>
 
-        <h:commandButton class="btn btn-success" style="margin: 10px" value="BuscarPersona" action="#{detalleBean.mensaje}">
+        <h:commandButton class="btn btn-success" style="margin: 10px" value="BuscarPersona" action="#{detalleBean.mensaje()}">
             <f:ajax execute="nombre" render="mensaje salida salida2 salida3 salida4 salida5" />
-            
         </h:commandButton>
         <div class="alert alert-primary" role="alert" style="width:176px;">
             <h:outputText id="mensaje" value="#{detalleBean.mensaje}"/>
         </div>
         <p> </p>
         <p> </p>
-        
-        <h:outputLabel for="salida" value="Cedula:" ></h:outputLabel>
-        <h:inputText id="salida" value="#{detalleBean.cedula}"></h:inputText>
-        <h:outputLabel for="salida2" value="Nombre:" ></h:outputLabel>
-        <h:inputText id="salida2" value="#{detalleBean.nombre}"></h:inputText>
-        <h:outputLabel for="salida3" value="Apellido:" ></h:outputLabel>
-        <h:inputText id="salida3" value="#{detalleBean.apellido}"></h:inputText>
-        <h:outputLabel for="salida4" value="Telefono:" ></h:outputLabel>
-        <h:inputText id="salida4" value="#{detalleBean.celular}"></h:inputText>
-        <h:outputLabel for="salida5" value="Direccion:" ></h:outputLabel>
-        <h:inputText id="salida5" value="#{detalleBean.direccion}"></h:inputText>
+        <h:outputLabel for="salida" value="Nombre:" ></h:outputLabel>
+        <h:inputText id="salida" value="#{detalleBean.nombre}"></h:inputText>
+        <h:outputLabel for="salida5" value="Apellido:" ></h:outputLabel>
+        <h:inputText id="salida5" value="#{detalleBean.apellido}"></h:inputText>
+        <h:outputLabel for="salida2" value="Cedula:" ></h:outputLabel>
+        <h:inputText id="salida2" value="#{detalleBean.cedula}"></h:inputText>
+        <h:outputLabel for="salida3" value="Telefono:" ></h:outputLabel>
+        <h:inputText id="salida3" value="#{detalleBean.celular}"></h:inputText>
+        <h:outputLabel for="salida4" value="Direccion:" ></h:outputLabel>
+        <h:inputText id="salida4" value="#{detalleBean.direccion}"></h:inputText>
         <h:commandButton   style="margin: 10px" class="btn btn-warning" value="Crear Persona" action="#{detalleBean.crearPersona()}">
         </h:commandButton>
-        
+
+       
+
     </h:form>
 
     <h3>Detalle Factura</h3>
@@ -103,8 +102,8 @@
           
             <h:column>
                 <f:facet name="header">Descripcion</f:facet>
-                <h:inputText value="#{o.name}" size="10" rendered="#{o.editable}" />
-                <h:outputText value="#{o.name}" rendered="#{not o.editable}" />
+                <h:inputText value="#{o.producto.nombre}" size="10" rendered="#{o.editable}" />
+                <h:outputText value="#{o.producto.nombre}" rendered="#{not o.editable}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Cantidad</f:facet>
@@ -123,33 +122,29 @@
                 <f:facet name="header">Subtotal</f:facet>
                 <h:inputText value="#{o.subtotal}" size="10"
                              rendered="#{o.editable}" />
-                <h:outputText value="#{o.subtotal}" rendered="#{not o.editable}" ><f:convertNumber pattern="#0.00" /></h:outputText>
+                <h:outputText value="#{o.subtotal}" rendered="#{not o.editable}" ><f:convertNumber  pattern="#0.00"/></h:outputText>
+                <!--  pattern="#0.00" -->
+                
             </h:column>
 
 
 
             <h:column>
                 <f:facet name="header">Eliminar</f:facet>
-                <h:commandLink value="Delete" action="#{detalleBean.delete(o)}" />
+                <h:commandLink value="Eliminar" action="#{detalleBean.delete(o)}" />
             </h:column>
-            <h:column>
-                <f:facet name="header">Editar</f:facet>
-                <h:commandLink value="Edit" action="#{detalleBean.edit(o)}"
-                               rendered="#{not o.editable}" />
-                <h:commandLink value="Save" action="#{detalleBean.save(o)}"
-                               rendered="#{o.editable}" />
-            </h:column>
+            
         </h:dataTable>
 
 
 
 
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:80%">
-            <h:column>
-                <f:facet name="header" > </f:facet>
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:67%">
+            <h:column  >
+                <f:facet name="header"></f:facet>
             </h:column>
-            <h:column >
+            <h:column>
                 <f:facet name="header">Subtotal</f:facet>
                 <h:outputText value="#{detalleBean.subtotalcabecera}" ><f:convertNumber pattern="#0.00" /></h:outputText>
             </h:column>
@@ -158,18 +153,7 @@
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
                      headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:76%">
             <h:column>
-                <f:facet name="header">                                                        </f:facet>
-            </h:column>
-            <h:column>
-                <f:facet name="header">Descuento</f:facet>
-                <h:outputText value="#{detalleBean.descuento}" ><f:convertNumber pattern="#0.00" /></h:outputText>
-            </h:column>
-        </h:dataTable>
-
-        <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:88%">
-            <h:column>
-                <f:facet name="header">                                                         </f:facet>
+                <f:facet name="header"></f:facet>
             </h:column>
             <h:column>
                 <f:facet name="header">Iva</f:facet>
@@ -178,23 +162,23 @@
         </h:dataTable>
 
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:84%">
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:72%">
             <h:column>
-                <f:facet name="header"  >                                                        </f:facet>
+                <f:facet name="header"  ></f:facet>
             </h:column>
             <h:column>
-                <f:facet name="header">Total A Pagar</f:facet>
+                <f:facet name="header">Total</f:facet>
                 <h:outputText value="#{detalleBean.totalpagar}" ><f:convertNumber pattern="#0.00" /></h:outputText>
 
             </h:column>
         </h:dataTable>
-       
-
-            <h6>Nombre &nbsp;:<h:inputText size="10" value="#{detalleBean.name}" /></h6>
-            <h6>Cantidad:<h:inputText size="10"
-                                      value="#{detalleBean.quantity}" />
-            </h6>
-       
+        
+        <h:outputLabel for="salida" value="Nombre:" ></h:outputLabel>
+        <h:inputText size="10" value="#{detalleBean.name}" ></h:inputText>
+        
+        <h:outputLabel for="salida" value="Cantidad: " ></h:outputLabel>
+        <h:inputText size="10" value="#{detalleBean.quantity}"></h:inputText>
+        
         <h:commandButton value="Buscar Producto" style="margin: 10px"  class="btn btn-success" action="#{detalleBean.add}" />
 
         <h:outputText id="producto" value="#{detalleBean.busqueda}"/>

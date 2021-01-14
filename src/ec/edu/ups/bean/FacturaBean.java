@@ -10,7 +10,10 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.annotation.FacesConfig;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @FacesConfig(version = FacesConfig.Version.JSF_2_3)
 @Named
@@ -131,5 +134,5 @@ public class FacturaBean implements Serializable {
         this.mensaje = "usuario registrado exitosamente";
     }
 
-
+    
 }

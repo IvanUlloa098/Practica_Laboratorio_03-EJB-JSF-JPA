@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      style="background-color:aliceblue">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"></script>
+<link rel="stylesheet" href="style/style.css"/>
+
+<h:head>
+    <title>Editar Producto</title>
+
+
+    <script type="text/javascript">
+        function indicador(data) {
+            if (data.status == "begin")
+                document.getElementById("id5").style.display = "inline";
+            else if (data.status == "success")
+                document.getElementById("id5").style.display = "none";
+        }
+    </script>
+
+</h:head>
+
+<h:body styleClass="modal-body text-center">
+    <h:outputLabel style="display: none" value="#{bodegaBean.cookie}"/>
+    <div class="navbar navbar-light bg-light justify-content-between">
+        <p:graphicImage value=""/>
+        <a class="navbar-brand">Producto</a>
+        <!--<p:commandLink styleClass="btn btn-primary" style="margin-right: 15px" value="Mi Colaborador"/>
+        <p:commandLink styleClass="btn btn-primary" style="margin-right: 15px" value="Mi Cuenta"/>
+        <p:commandLink styleClass="btn btn-primary" style="margin-right: auto" value="Mi Perfil"/>
+        <p:commandLink styleClass="btn btn-danger" style="margin-left: auto" value="Cerrar Sesion"/>-->
+    </div>
+
+    <h:form id="form" style="float: left;width: 40%;margin-right: 25%;margin-left: 32%;margin-top: 5%;">
+        <fieldset>
+            <legend>Editar Producto</legend>
+            <h:inputHidden id="hidden2" value="#{productoBean.codigoProducto}"/>
+            <input type="hidden" name="hidden" value="#{productoBean.codigoProducto}" />
+            
+            <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;margin-left: 10%;"/>
+	        <h:inputText id="nombre" value="#{productoBean.nombreProducto}" style="width:80%;"></h:inputText>
+	        <h:message for="nombre"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="precioCompra" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
+	        <h:inputText id="precioCompra" value="#{productoBean.precioCompra}" style="width: 80%;"></h:inputText>
+	        <h:message for="precioCompra"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="precioVenta" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
+	        <h:inputText id="precioVenta" value="#{productoBean.precioVenta}" style="width: 80%;"></h:inputText>
+	        <h:message for="precioVenta"></h:message>
+	        <br></br><br></br>
+	
+	        <h:outputText value="IVA" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
+	        <h:inputText id="iva" value="#{productoBean.iva}" style="width: 80%;"></h:inputText>
+	        <h:message for="iva"></h:message>
+	        <br></br><br></br>
+	        	
+	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.categoria}" style="margin-right: 15%;">
+	            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}"/>
+	        </h:selectOneMenu>
+	
+	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 1%;">
+	            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}"/>
+	        </h:selectOneMenu>
+	
+	        <h:commandButton action="#{productoBean.actualizarProducto}" onclick="$('#form\\:hidden').val('#{productoBean.codigoProducto}')" value="Actualizar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
+	        <h:commandButton action="#{productoBean.eliminarProducto}" onclick="$('#form\\:hidden').val('#{productoBean.codigoProducto}')" value="Eliminar" class="btn btn-primary" style="margin-left: 7%;width: 45%;margin-top: 5%"></h:commandButton>
+       
+        </fieldset>
+
+    </h:form>
+
+</h:body>
+
+</html>
