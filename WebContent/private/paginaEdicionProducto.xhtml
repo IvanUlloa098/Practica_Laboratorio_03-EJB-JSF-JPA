@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      style="background-color:aliceblue">
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="javascript"></script>
@@ -45,22 +46,22 @@
             <h:inputHidden id="hidden2" value="#{productoBean.codigoProducto}"/>
             <input type="hidden" name="hidden" value="#{productoBean.codigoProducto}" />
             
-            <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;"/>
+            <h:outputText value="nombre" style="background-color: dimgrey; color:white;font-style: inherit;font-size: 20px; display: block;width: 80%;margin-left: 10%;"/>
 	        <h:inputText id="nombre" value="#{productoBean.nombreProducto}" style="width:80%;"></h:inputText>
 	        <h:message for="nombre"></h:message>
 	        <br></br><br></br>
 	
-	        <h:outputText value="precioCompra" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
+	        <h:outputText value="precioCompra" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
 	        <h:inputText id="precioCompra" value="#{productoBean.precioCompra}" style="width: 80%;"></h:inputText>
 	        <h:message for="precioCompra"></h:message>
 	        <br></br><br></br>
 	
-	        <h:outputText value="precioVenta" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
+	        <h:outputText value="precioVenta" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
 	        <h:inputText id="precioVenta" value="#{productoBean.precioVenta}" style="width: 80%;"></h:inputText>
 	        <h:message for="precioVenta"></h:message>
 	        <br></br><br></br>
 	
-	        <h:outputText value="IVA" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;"/>
+	        <h:outputText value="IVA" style="background-color: dimgrey; color: aliceblue;font-style: inherit;font-size: 20px;display: block;width: 80%;margin-left: 10%;"/>
 	        <h:inputText id="iva" value="#{productoBean.iva}" style="width: 80%;"></h:inputText>
 	        <h:message for="iva"></h:message>
 	        <br></br><br></br>
@@ -69,7 +70,7 @@
 	            <f:selectItems  value="#{productoBean.list}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}"/>
 	        </h:selectOneMenu>
 	
-	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 15%;">
+	        <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle" value="#{productoBean.selectedbodega}" style="margin-right: 1%;">
 	            <f:selectItems value="#{productoBean.bodegas}" var="bodegas" itemValue="#{bodegas.codigo}" itemLabel="#{bodegas.nombre}"/>
 	        </h:selectOneMenu>
 	

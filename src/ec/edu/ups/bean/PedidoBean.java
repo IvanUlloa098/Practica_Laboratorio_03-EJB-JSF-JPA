@@ -160,7 +160,7 @@ public class PedidoBean implements Serializable {
 
     public void redirectFacturas(){
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("../factura.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../private/factura.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
         }

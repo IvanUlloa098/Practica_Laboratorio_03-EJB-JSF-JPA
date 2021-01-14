@@ -5,7 +5,8 @@
        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
        xmlns:f="http://xmlns.jcp.org/jsf/core"
        xmlns:p="http://primefaces.org/ui"
-       xmlns:pe="http://primefaces.org/ui/extensions">
+       xmlns:pe="http://primefaces.org/ui/extensions"
+       style="background-color:ghostwhite">
 
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
@@ -20,7 +21,7 @@
 <h:body styleClass="modal-body text-center">
     <h:outputLabel style="display: none" value="#{pedidoBean.cookie}"/>
     <div class="navbar navbar-light bg-light justify-content-between">
-        <p:graphicImage value=""/>
+        <p:graphicImage value="https://media1.tenor.com/images/32b8bd30473ec97f9f4f85c5eedb345d/tenor.gif?itemid=16761523" style="width:100px;"/>
         <a class="navbar-brand">Buscar Factura</a>
          <h:form id="form" style="float:left;width:0px">
     
@@ -39,7 +40,7 @@
     <h3>Facturas</h3>
   
     <h:form id="cedu">
-      <h:dataTable value="#{collectionBean.list}" var="c" styleClass="tabla"
+      <h:dataTable value="#{collectionBean.list}" var="c" styleClass="table table-bordered table-hover"
                      headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" >
              <h:column>
                 <f:facet name="header">Codigo</f:facet>#{c.codigo}
