@@ -1,6 +1,7 @@
 package ec.edu.ups.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.annotation.FacesConfig;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
@@ -17,7 +19,10 @@ import javax.servlet.http.HttpSession;
 import ec.edu.ups.ejb.*;
 import ec.edu.ups.entidad.Bodega;
 import ec.edu.ups.entidad.Categoria;
+import ec.edu.ups.entidad.Ciudad;
+import ec.edu.ups.entidad.Pais;
 import ec.edu.ups.entidad.Producto;
+import ec.edu.ups.entidad.Provincia;
 import ec.edu.ups.entidad.Stock;
 
 //Activates CDI build-in beans
@@ -30,6 +35,7 @@ public class ProductoBean implements Serializable{
     private static final long serialVersionUID=1L;
     @EJB
     private ProductoFacade ejbProductoFacade;
+    private int codigoProducto;
     private String nombre;
     private String imagen;
     private String precioCompra;
@@ -39,27 +45,29 @@ public class ProductoBean implements Serializable{
     private String categoria;
     private List<Categoria> list;
     private List<Bodega> bodegas;
-    private List<String> selectedbodegas;
+    private String selectedbodega;
     @EJB
     private BodegaFacade ejbBodegaFacade;
 
     @EJB
     private CategoriaFacade ejbCategoriaFacade;
-
     private List<Producto> productos;
     private String selectedProducto;
     private String stock_mas;
     private List<String> bodegas_stock;
+    private String bodega_stock;
     //atributo para consultar inventario
     private String bodega_inventario ;
-    private List<Producto> productos_list;
+    private List<Producto> productos_bodega;
+    private List<Producto> productos_total;
     private boolean disabled=true;
     @EJB
     private StockFacade ejbStockFacade;
+    
     private String cookie;
-
-
-
+    private Producto producto;
+    String nombreProducto;
+    
     public ProductoBean() {
 
     }
@@ -71,8 +79,23 @@ public class ProductoBean implements Serializable{
         productos= ejbProductoFacade.findAll();
 
     }
+    public List<Producto> getProductos_total() {
+		return listarProductosStockTotal();
+	}
 
-    public boolean isDisabled() {
+	public void setProductos_total(List<Producto> productos_total) {
+		this.productos_total = productos_total;
+	}
+
+	public String getBodega_stock() {
+		return bodega_stock;
+	}
+
+	public void setBodega_stock(String bodega_stock) {
+		this.bodega_stock = bodega_stock;
+	}
+
+	public boolean isDisabled() {
         return disabled;
     }
 
@@ -88,9 +111,24 @@ public class ProductoBean implements Serializable{
         this.bodega_inventario = bodega_inventario;
         this.disabled=false;
     }
+    
+    public String getNombreProducto() {
+		return nombreProducto;
+	}
 
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
+	}
 
-    public List<String> getBodegas_stock() {
+	public int getCodigoProducto() {
+		return codigoProducto;
+	}
+
+	public void setCodigoProducto(int codigoProducto) {
+		this.codigoProducto = codigoProducto;
+	}
+
+	public List<String> getBodegas_stock() {
         return bodegas_stock;
     }
 
@@ -131,15 +169,15 @@ public class ProductoBean implements Serializable{
         this.bodegas = bodegas;
     }
 
-    public List<String> getSelectedbodegas() {
-        return selectedbodegas;
-    }
+    public String getSelectedbodega() {
+		return selectedbodega;
+	}
 
-    public void setSelectedbodegas(List<String> selectedbodegas) {
-        this.selectedbodegas = selectedbodegas;
-    }
+	public void setSelectedbodega(String selectedbodega) {
+		this.selectedbodega = selectedbodega;
+	}
 
-    public Categoria[] getList() {
+	public Categoria[] getList() {
         return list.toArray(new Categoria[0]);
     }
 
@@ -203,72 +241,155 @@ public class ProductoBean implements Serializable{
         this.categoria = categoria;
     }
 
-    public List<Producto> getProductos_list() {
+    public List<Producto> getProductos_bodega() {
         return consultarInventarioPorBodega();
     }
 
-    public void setProductos_list(List<Producto> productos_list) {
-        this.productos_list = productos_list;
+    public void setProductos_bodega(List<Producto> productos_list) {
+        this.productos_bodega = productos_list;
+    }
+    
+    
+    //Metodos de edicion de Producto
+    public String edit (Producto p){
+        p.setEditable(true);
+        return null;
+    }
+    
+    public void buscarProducto(int codigo){
+    	
+        this.producto=ejbProductoFacade.find(codigo);
+        this.nombreProducto=producto.getNombre();
+        this.codigoProducto=codigo;
+        this.precioCompra = ""+producto.getPrecioCompra();
+        this.precioVenta = ""+producto.getPrecioVenta();
+        this.iva = ""+producto.getIva();
+    }
+    
+    public void navegar(){
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaEdicionProducto.xhtml");
+    }
+    
+    public void actualizarProducto(){
+    	
+    	char iva_char;
+    	try {
+    		iva_char = iva.charAt(0);
+		} catch (Exception e) {
+			iva_char = 'S';
+		}
+    	
+    	String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hidden");
+    	
+        System.out.println(">>>>>>>>> "+value);
+        Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
+        Producto s1 = new Producto(Integer.parseInt(value), nombreProducto, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, 1, categoria_buscada);
+        Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
+        
+        a1.agregarProducto(s1);
+        s1.addBodega(a1);
+        ejbProductoFacade.edit(s1);
+        System.out.println("actualizado!!");
+        
+        this.nombreProducto = null;
+        this.nombre = null;
+        this.precioCompra = null;
+        this.precioVenta = null;
+        this.iva = null;
+        
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+    }
+    
+    public void eliminarProducto() {
+    	
+    	int value = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hidden"));
+    	    	
+    	this.producto=ejbProductoFacade.find(value);
+    	
+    	try {
+    		ejbProductoFacade.remove(this.producto);
+		} catch (Exception e) {
+			System.out.println("IMPOSIBLE ELIMINAR");
+		}
+    	
+    	FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+    	
     }
 
+    //Agregar producto
     public void addProducto() {
 
-        char iva_char = iva.charAt(0);
+    	char iva_char;
+    	try {
+    		iva_char = iva.charAt(0);
+		} catch (Exception e) {
+			iva_char = 'S';
+		}        
 
-        List<Bodega> bodegas_buscadas = new ArrayList<Bodega>();
+        //System.out.println(">>>>>>>>> "+categoria);
+        Categoria categoria_buscada = ejbCategoriaFacade.find(Integer.parseInt(categoria));
+        Producto s1 = new Producto(nombre, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, 1, categoria_buscada);
 
-        Categoria categoria_buscada = ejbCategoriaFacade.buscarCategoriaPorNombre(categoria);
-        System.out.println("aki");
-        Producto s1 = new Producto(nombre, imagen, Double.parseDouble(precioCompra), Double.parseDouble(precioVenta), iva_char, Integer.parseInt(stock), categoria_buscada);
-        System.out.println("aki2");
-        System.out.println("aki3");
-
-        for (String bodega_name : selectedbodegas) {
-            String stock_val=this.stock;
-            Bodega a1 = ejbBodegaFacade.buscarBodegaPorNombre(bodega_name);
-            if (a1 != null) {
-                Stock stock = new Stock(Integer.parseInt(stock_val),s1,a1);
-                a1.agregarProducto(s1);
-                a1.addStock(stock);
-                System.out.println("stock");
-                s1.addBodega(a1);
-                System.out.println("bodega");
-                s1.addStock(stock);
-                System.out.println("insertado!!");
-            } else {
-                System.out.println("el objeto es nulo");
-            }
-        }
-        ejbProductoFacade.create(s1);
+        String stock_val=this.stock;
+        //System.out.println(">>>>>>>>> "+selectedbodega);
+        Bodega a1 = ejbBodegaFacade.find(Integer.parseInt(selectedbodega));
+        
+        if (a1 != null) {
+        	
+            a1.agregarProducto(s1);
+            s1.addBodega(a1);
+            ejbProductoFacade.create(s1);
+            System.out.println("insertado!!");
+        } else {
+            System.out.println("el objeto es nulo");
+        } 
+        
+        nombre = null;
+        precioCompra = null;
+        precioVenta = null;
+        iva = null;
+        
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
+        
     }
+    
     public void aumentarStock(){
         //Buscar el producto
-        Producto product=ejbProductoFacade.buscarPrductoPorNombre(selectedProducto);
-        if(product!=null)
-            System.out.println("PRODUCTO ENCONTRADO");
+        Producto product=ejbProductoFacade.find(Integer.parseInt(selectedProducto));
+        System.out.println("PRODUCTO ENCONTRADO");
         //Buscar la Bodega
-        Bodega bodeg= ejbBodegaFacade.buscarBodegaPorNombre(bodegas_stock.get(0));
-        if(bodeg!=null)
-            System.out.println("BODEGA ENCONTRADO");
+        Bodega bodeg= ejbBodegaFacade.find(Integer.parseInt(this.bodega_stock));
+        System.out.println("BODEGA ENCONTRADO");
         //Actualizar entidad Stock
-        Stock stock_actualizar = ejbStockFacade.recuperarStock(product,bodeg);
-        stock_actualizar.setStock(Integer.parseInt(stock_mas));
-        if(stock_actualizar!=null)
+        System.out.println(product.getCodigo());
+        
+        try {
+        	Stock stock_actualizar = ejbStockFacade.recuperarStock(product,bodeg);
+            stock_actualizar.setStock(stock_actualizar.getStock()+Integer.parseInt(stock_mas));
             System.out.println("STOCK ENCONTRADO");
-        ejbStockFacade.edit(stock_actualizar);
+            ejbStockFacade.edit(stock_actualizar);
+		} catch (Exception e) {
+			Stock stock = new Stock(Integer.parseInt(stock_mas),product,bodeg);
+			ejbStockFacade.create(stock);
+		}   
+        
+        FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaAdministrador.xhtml");
+        
     }
+    
     public List<Producto> consultarInventarioPorBodega(){
         
         if(bodega_inventario!=null){
-            Bodega bodega_to_inventario=ejbBodegaFacade.buscarBodegaPorNombre(bodega_inventario);
+            Bodega bodega_to_inventario=ejbBodegaFacade.buscarBodegaPorNombre(Integer.parseInt(bodega_inventario));
             if(bodega_to_inventario!=null)
                 System.out.println("bodega encontrada");
+            
             List<Stock> stock_inventario= ejbStockFacade.recuperarStockPorBodega(bodega_to_inventario);
             if(bodega_to_inventario!=null)
                 System.out.println("inventario encontrado");
             List<Producto> productos_inventario= new ArrayList<Producto>();
-            for (Stock stock_inv:stock_inventario
-            ) {
+            for (Stock stock_inv:stock_inventario) {
+            	
                 String codigo_prod_inv=stock_inv.getProducto().getNombre();
                 System.out.println("nombre del producto buscado "+codigo_prod_inv);
 
@@ -278,6 +399,7 @@ public class ProductoBean implements Serializable{
                 System.out.println(producto_inv.toString());
                 productos_inventario.add(producto_inv);
             }
+            
             return productos_inventario;
         } else {
             Producto pr = new Producto();
@@ -288,6 +410,40 @@ public class ProductoBean implements Serializable{
 
         }
     }
+    
+    public List<Producto> listarProductosStockTotal() {
+    	
+    	List<Producto> prTotal =  new ArrayList<Producto>();
+    	
+    	for (Producto p:productos) {
+    		
+    		p.setStock(this.consultarStockTotal(p));
+    		prTotal.add(p);
+    	}
+    	
+    	return prTotal;
+    }
+    
+    public Integer consultarStockTotal(Producto pr) {
+    	
+    	int st = 0;
+    	//System.out.println("ENTAR EN consultarStockPorBodega");
+    	//System.out.println(">> "+pr.getNombre());
+    	try {
+    		List<Stock> productos_null= ejbStockFacade.recuperarStockProducto(pr);
+            
+            for (Stock s: productos_null) {
+            	st = st + s.getStock();
+            }
+            
+		} catch (Exception e) {
+			System.out.println("NO HAY STOCK");
+		}
+    	
+    	//System.out.println(">> "+st);
+        return st;
+    }
+    
     public String getCookie() {
         Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
         if(cookie !=null) {
@@ -309,43 +465,52 @@ public class ProductoBean implements Serializable{
         }
         return "Bienvenido!";
     }
-//FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaBodegas.xhtml")
-
- public void validar_usuario(){
-	HttpSession sesion = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getSession();
-	sesion.getAttribute("administrador");
-	boolean rol = (boolean) sesion.getAttribute("administrador");
-	 String correo = (String) sesion.getAttribute("correo");
+	//FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaBodegas.xhtml")
 	
-	if (correo==null && rol==false) {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("../public/logIn.xhtml");
+	 public void validar_usuario(){
+		HttpSession sesion = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getSession();
+		sesion.getAttribute("administrador");
+		boolean rol = (boolean) sesion.getAttribute("administrador");
+		 String correo = (String) sesion.getAttribute("correo");
+		
+		if (correo==null && rol==false) {
+			try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("../public/logIn.xhtml");
+			}
+		  catch (Exception e) {
+	          e.printStackTrace();
+		  }
 		}
-	  catch (Exception e) {
-          e.printStackTrace();
-	  }
-	}
- }
-
- public void deleteCookie(){
+	 }
+	
+	 public void deleteCookie(){
+	 
+	     FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("administrador", "empleado", null);
+	     Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
+	     if(cookie.getValue().equals("")) System.out.println("Se ha borrado la cookie de manera correcta!"); else
+	         System.out.println("Se ha nulificado el valor correctamente!");
+	     try {
+	         FacesContext.getCurrentInstance().getExternalContext().redirect("../public/paginaCatalogo.xhtml");
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     }
+	 }
  
-     FacesContext.getCurrentInstance().getExternalContext().addResponseCookie("administrador", "empleado", null);
-     Cookie cookie = (Cookie) FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap().get("administrador");
-     if(cookie.getValue().equals("")) System.out.println("Se ha borrado la cookie de manera correcta!"); else
-         System.out.println("Se ha nulificado el valor correctamente!");
-     try {
-         FacesContext.getCurrentInstance().getExternalContext().redirect("../public/paginaCatalogo.xhtml");
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
- }
-    public void redirectBodegas(){
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaBodegas.xhtml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	public void redirectBodegas(){
+	    try {
+	        FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaBodegas.xhtml");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public void redirectProducto(){
+	    try {
+	        FacesContext.getCurrentInstance().getExternalContext().redirect("../private/paginaProducto.xhtml");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 
   
       

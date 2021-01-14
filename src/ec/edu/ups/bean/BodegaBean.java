@@ -129,9 +129,6 @@ public class BodegaBean implements Serializable {
         return c;
     }
 
-
-
-
     public void buscarBodega(int codigo){
         this.bodega=ejbBodegaFacade.find(codigo);
         this.nombreBodega=bodega.getNombre();
