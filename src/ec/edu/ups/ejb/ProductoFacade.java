@@ -60,20 +60,16 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return entityManager;
     }
 
-    public Map<String, String> getProductosPorCategoria(Categoria categoria){
+    public List<Producto> getProductosPorCategoria(Categoria categoria){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Producto> productoCriteriaQuery = criteriaBuilder.createQuery(Producto.class);
-        Root<Producto> productoRoot = productoCriteriaQuery.from(Producto.class);
-        productoCriteriaQuery.select(productoRoot)
-                .where(
-                        criteriaBuilder.equal(productoRoot.get("categoria"), categoria));
-
-         return entityManager.createQuery(productoCriteriaQuery).getResultList()
-                 .parallelStream()
-                 .collect(Collectors.toMap(Producto::getCodigo, Producto::getNombre)).entrySet()
-                 .parallelStream()
-                 .collect(Collectors.toMap(entry -> valueOf(entry.getKey()), Map.Entry::getValue));
+        CriteriaQuery<Producto> criteriaQuery = criteriaBuilder.createQuery(Producto.class);
+        
+        Root<Producto> categoriaRoot= criteriaQuery.from(Producto.class);
+        Predicate predicate= criteriaBuilder.equal(categoriaRoot.get("categoria"),categoria);
+        criteriaQuery.select(categoriaRoot).where(predicate);
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
+    
     private List<Integer> codigoProductos;
     public List<Integer> getProductosPorBodega(int codigoBodega){
         codigoProductos = new ArrayList<>();

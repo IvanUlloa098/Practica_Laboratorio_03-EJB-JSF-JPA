@@ -21,12 +21,12 @@ public class CategoriaFacade extends AbstractFacade<Categoria> {
         super(Categoria.class);
     }
 
-    public Categoria buscarCategoriaPorNombre(String nombre){
+    public Categoria buscarCategoriaPorNombre(int codigo){
         System.out.println("llego a buscar  Categoria por nombre");
         CriteriaBuilder criteriaBuilder= entityManager.getCriteriaBuilder();
         CriteriaQuery<Categoria> criteriaQuery= criteriaBuilder.createQuery(Categoria.class);
         Root<Categoria> categoriaRoot= criteriaQuery.from(Categoria.class);
-        Predicate predicate= criteriaBuilder.equal(categoriaRoot.get("nombre"),nombre);
+        Predicate predicate= criteriaBuilder.equal(categoriaRoot.get("codigo"),codigo);
         criteriaQuery.select(categoriaRoot).where(predicate);
         System.out.println("Salio de a buscar Categoria por nombre");
         return entityManager.createQuery(criteriaQuery).getSingleResult();
