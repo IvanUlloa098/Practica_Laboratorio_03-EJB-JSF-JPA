@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>JSF 2.3</title>
+	<script type="text/javascript">
+		function indicador(data) {
+			if (data.status == "begin")
+				document.getElementById("id5").style.display = "inline";
+			else if (data.status == "success")
+				document.getElementById("id5").style.display = "none";
+		}
+	</script>
+</h:head>
+<h:body>
+	<h:form>
+		<fieldset>
+			<legend>Ajax</legend>
+			Level1:
+			<h:selectOneMenu value="#{ajax.level1}">
+				<f:selectItems value="#{ajax.level1List}" />
+				<f:ajax render="idList2 idList3 id4" />
+			</h:selectOneMenu>
+			<br />Level2:
+			<h:selectOneMenu value="#{ajax.level2}" id="idList2"
+				disabled="#{ajax.level2ListDisabled}">
+				<f:selectItems value="#{ajax.level2List}" />
+				<f:ajax render="idList3 id4" onevent="indicador" />
+			</h:selectOneMenu>
+			<br />Level3:
+			<h:selectOneMenu value="#{ajax.level3}" id="idList3"
+				disabled="#{ajax.level3ListDisabled}">
+				<f:selectItems value="#{ajax.level3List}" />
+				<f:ajax render="id4" onevent="indicador" />
+			</h:selectOneMenu>
+			<br /> <span id="id5" style="display: none;"> Cargando... </span>Elegido:
+			<h:outputText value="#{ajax.level3}" id="id4" />
+		</fieldset>
+	</h:form>
+</h:body>
+</html>
