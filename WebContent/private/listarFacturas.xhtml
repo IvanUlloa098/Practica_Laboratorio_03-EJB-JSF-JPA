@@ -71,15 +71,9 @@
             </h:column>
             <h:column>
                 <f:facet name="header">Accion</f:facet>
-                <h:commandLink value="Delete" action="#{collectionBean.delete(c)}" />
+                <h:commandLink value="Anular" action="#{collectionBean.anularFacturas(c.codigo)}" />
             </h:column>
-            <h:column>
-                <f:facet name="header">Accion</f:facet>
-                <h:commandLink value="Edit" action="#{collectionBean.edit(c)}"
-                               rendered="#{not c.editable}" />
-                <h:commandLink value="Save" action="#{collectionBean.save(c)}"
-                               rendered="#{c.editable}" />
-            </h:column>
+            
         </h:dataTable>
         <h:link value="Regresar Facturacion" outcome="factura.xhtml" />
     </h:form>

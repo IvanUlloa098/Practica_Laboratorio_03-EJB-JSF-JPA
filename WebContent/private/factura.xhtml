@@ -101,8 +101,8 @@
           
             <h:column>
                 <f:facet name="header">Descripcion</f:facet>
-                <h:inputText value="#{o.name}" size="10" rendered="#{o.editable}" />
-                <h:outputText value="#{o.name}" rendered="#{not o.editable}" />
+                <h:inputText value="#{o.producto.nombre}" size="10" rendered="#{o.editable}" />
+                <h:outputText value="#{o.producto.nombre}" rendered="#{not o.editable}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Cantidad</f:facet>
@@ -130,15 +130,9 @@
 
             <h:column>
                 <f:facet name="header">Eliminar</f:facet>
-                <h:commandLink value="Delete" action="#{detalleBean.delete(o)}" />
+                <h:commandLink value="Eliminar" action="#{detalleBean.delete(o)}" />
             </h:column>
-            <h:column>
-                <f:facet name="header">Editar</f:facet>
-                <h:commandLink value="Edit" action="#{detalleBean.edit(o)}"
-                               rendered="#{not o.editable}" />
-                <h:commandLink value="Save" action="#{detalleBean.save(o)}"
-                               rendered="#{o.editable}" />
-            </h:column>
+            
         </h:dataTable>
 
 

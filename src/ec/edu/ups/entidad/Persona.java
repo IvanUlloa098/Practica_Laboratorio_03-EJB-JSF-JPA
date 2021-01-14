@@ -47,7 +47,7 @@ public class Persona implements Serializable {
 	        this.nombre = nombre;
 	        this.apellido = apellido;
 	        this.direccion = direccion;
-	        this.cedula = celular;
+	        this.telefono = celular;
 	        this.correo = correo;
 	        this.password = password;
 	        this.anulado = anulado;
