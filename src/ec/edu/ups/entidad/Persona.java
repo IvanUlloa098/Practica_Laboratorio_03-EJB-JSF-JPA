@@ -42,22 +42,23 @@ public class Persona implements Serializable {
 	        this.pedidos = pedidos;
 	    }
 
-	    public Persona(String cedula, String nombre, String apellido, String direccion, String celular, String correo, String password, char anulado) {
+	    public Persona(String cedula, String nombre, String apellido, String direccion, String telefono, String correo, String password, char anulado) {
 	        this.cedula = cedula;
 	        this.nombre = nombre;
 	        this.apellido = apellido;
 	        this.direccion = direccion;
-	        this.telefono = celular;
+	        this.telefono = telefono;
 	        this.correo = correo;
 	        this.password = password;
 	        this.anulado = anulado;
 	    }
 
-	    public Persona(String cedula, String nombre, String apellido, String direccion, String celular) {
+	    public Persona(String cedula, String nombre, String apellido, String direccion, String telefono) {
 	        this.cedula = cedula;
 	        this.nombre = nombre;
 	        this.apellido = apellido;
 	        this.direccion = direccion;
+	        this.telefono=telefono;
 	    }
 
 	    public String getCorreo() {

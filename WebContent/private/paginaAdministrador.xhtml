@@ -73,7 +73,7 @@
    
    <div style="float: left;width: 40%;margin-right: 1%;margin-left: 5%;margin-top: 5%;">
    
-   		<h:form>
+   		<h:form style="margin-left: 40%;">
 	        <fieldset>
 	            
 	            <br /><h2>Disponibilidad</h2>
@@ -117,8 +117,8 @@
    		
    		<div style="float: left; width: 50%;">
    			
-   			<h1 >Categorias:</h1>
-		    <h:dataTable  style="width: 37%; height:200px;margin-top: 2%; background-color:darkseagreen" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
+   			<h1 style="margin-left:12%;" >Categorias:</h1>
+		    <h:dataTable  style="width: 37%; height:200px;margin-top: 2%; background-color:darkseagreen;margin-top: 9%;margin-left: 36%;" value="#{productoBean.list}" var="c" styleClass="table table-dark table-striped"
 		                  headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" >
 		        <h:column>
 		            <f:facet name="header">Nombre</f:facet>
@@ -130,10 +130,11 @@
    		</div>
    		
 	    
-	    <div style="float: left; width: 50%;">
+	    <div style="float: left; width: 50%; ">
 	    	
-	    	<h1 >Productos:</h1>
-		     <h:dataTable  style="width: 37%; height:200px;margin-top: 2%;background-color:darkseagreen" value="#{productoBean.productos_total}" var="p" styleClass="table table-dark table-striped"
+	    	<h1 style="margin-left:75%">Productos:</h1>
+		     <h:dataTable  style="width: 37%; height:200px;margin-top: 2%;background-color:darkseagreen;margin-top: -83%;
+    margin-left: 214%;" value="#{productoBean.productos_total}" var="p" styleClass="table table-dark table-striped"
 		                  headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" >
 		        <h:column>
 		            <f:facet name="header">Nombre</f:facet>

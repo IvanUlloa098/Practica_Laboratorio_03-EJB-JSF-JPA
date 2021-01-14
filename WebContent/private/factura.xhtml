@@ -38,14 +38,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"/>
 </h:head>
-<nav class="navbar navbar-expand-md navbar-dark" style="background-color: black">
+<nav class="navbar navbar-expand-md navbar-dark" style="background-color: dimgray;">
     <div>
         <a href="https://www.javaguides.net" class="navbar-brand">TusBodegas.com</a>
     </div>
-    <h:form>
+    <h:form style="margin-left: 54%;">
     <ul class="navbar-nav">
         <li>
-            <h:commandLink styleClass="nav-link" action="#{detalleBean.redirectPedido}">Pedidos</h:commandLink>
+            <h:commandLink styleClass="nav-link" action="#{detalleBean.redirectPedido}">Buscar Factura</h:commandLink>
         </li>
 
         <li>
@@ -58,13 +58,14 @@
     </ul>
     </h:form>
 </nav>
-<h:body>
+<h:body  style="background-image: url('https://www.transfiriendo.com/wp-content/uploads/2020/06/c03417ebf4f447610528b07a704e0540.gif');background-size:50%; background-repeat: no-repeat;background-position: 871px;">
     <h:outputLabel style="display: none" value="#{detalleBean.cookie}"/>
     <div class="container col-md-5">
     <div class="card">
     <div class="card-body">
 
     <h3> Factura</h3>
+    <h2 style="margin-left:-65%">Crear Persona</h2>
     <h:form id="form" style="float:left;margin-left:-329px;width:0px">
         <h:outputLabel class="form-group" for="nombre" value="Cedula: "></h:outputLabel>
         <h:inputText class="form-group" id="nombre" value="#{detalleBean.cedula}"></h:inputText>
@@ -139,9 +140,9 @@
 
 
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
-            <h:column>
-                <f:facet name="header">---------------------------------------------------------</f:facet>
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:67%">
+            <h:column  >
+                <f:facet name="header"></f:facet>
             </h:column>
             <h:column>
                 <f:facet name="header">Subtotal</f:facet>
@@ -150,9 +151,9 @@
         </h:dataTable>
 
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:76%">
             <h:column>
-                <f:facet name="header">--------------------------------------------------------------</f:facet>
+                <f:facet name="header"></f:facet>
             </h:column>
             <h:column>
                 <f:facet name="header">Iva</f:facet>
@@ -161,12 +162,12 @@
         </h:dataTable>
 
         <h:dataTable value="#{detalleBean.fila}" var="o" styleClass="tabla"
-                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar">
+                     headerClass="cabeceraTabla" rowClasses="filaPar,filaImpar" style="margin-left:72%">
             <h:column>
-                <f:facet name="header"  >----------------------------------------------------</f:facet>
+                <f:facet name="header"  ></f:facet>
             </h:column>
             <h:column>
-                <f:facet name="header">Total A Pagar</f:facet>
+                <f:facet name="header">Total</f:facet>
                 <h:outputText value="#{detalleBean.totalpagar}" ><f:convertNumber pattern="#0.00" /></h:outputText>
 
             </h:column>

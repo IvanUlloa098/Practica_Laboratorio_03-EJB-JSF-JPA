@@ -35,7 +35,7 @@
 
     <nav class="navbar navbar-expand-md navbar-dark" style="background-color: black; width: 100%">
         <div>
-            <a href="https://www.javaguides.net" class="navbar-brand">TiendaOnline.com </a>
+            <a href="https://www.javaguides.net" class="navbar-brand">TusBodegas.com </a>
         </div>
 
         <ul class="navbar-nav">
@@ -43,12 +43,11 @@
                 <h:commandLink class="nav-link" action="#{bodegaBean.regresar}" value="Regresar"/>
             </li>
         </ul>
-        <button style="margin-left: auto" class="btn  btn-outline-success my-2 my-sm-0 " type="submit"> Cerrar Sesion
-        </button>
+        
     </nav>
 </h:form>
 
-<h:body styleClass="modal-body text-center">
+<h:body styleClass="modal-body text-center" style= "background-image: url('https://i1.wp.com/logicopanama.com/wp-content/uploads/2018/05/g2.gif?resize=500%2C431');background-size:100%; background-repeat: no-repeat" >
 
     <h3>Gestión de bodegas</h3>
 
@@ -57,7 +56,7 @@
         <fieldset>
             <legend>Registrar Bodega Nueva</legend>
 
-            <p>Nombre Bodega:<h:inputText size="10" value="#{bodegaBean.nombre}"/></p>
+            <p>Nombre Bodega:<h:inputText size="15" value="#{bodegaBean.nombre}"/></p>
             <h:outputLabel style="display: none" value="#{bodegaBean.cookie}"/>
             <p>Ubicacion:</p>
             <p>
@@ -93,7 +92,7 @@
         </fieldset>
 
 
-        <h:dataTable value="#{bodegaBean.bodegas}" var="b" styleClass="table table-bordered table-hover">
+        <h:dataTable style="background:aliceblue;" value="#{bodegaBean.bodegas}" var="b" styleClass="table table-bordered table-hover" >
            
             <h:column>
                 <f:facet name="header">Nombre</f:facet>
