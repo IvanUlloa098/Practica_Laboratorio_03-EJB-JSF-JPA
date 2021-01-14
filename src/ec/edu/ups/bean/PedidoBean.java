@@ -2,6 +2,7 @@ package ec.edu.ups.bean;
 
 import ec.edu.ups.ejb.*;
 import ec.edu.ups.entidad.*;
+import javax.servlet.http.Cookie;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -11,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.swing.*;
 
-import org.glassfish.grizzly.http.Cookie;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
