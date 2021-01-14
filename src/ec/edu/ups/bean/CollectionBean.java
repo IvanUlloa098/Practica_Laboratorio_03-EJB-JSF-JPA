@@ -1,7 +1,11 @@
 package ec.edu.ups.bean;
 
 import ec.edu.ups.ejb.FacturaCabeceraFacade;
+import ec.edu.ups.ejb.FacturaDetalleFacade;
+import ec.edu.ups.ejb.StockFacade;
 import ec.edu.ups.entidad.FacturaCabecera;
+import ec.edu.ups.entidad.FacturaDetalle;
+import ec.edu.ups.entidad.Stock;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 @Named
@@ -24,6 +29,12 @@ public class CollectionBean implements Serializable {
 
     @EJB
     FacturaCabeceraFacade  ejbfacturaCabeceraFacade ;
+    
+    @EJB
+	private FacturaDetalleFacade ejbFacturaDetalleFacade;
+    
+    @EJB
+    private StockFacade ejbStockFacade;
 
 
     public CollectionBean() {
@@ -67,6 +78,43 @@ public class CollectionBean implements Serializable {
         this.cedula = cedula;
     }
 //Metodo para buscar factura
+    
+	public void anularFacturas(int id) {
+			
+	    	FacturaCabecera fc;
+	    	
+	    	List<FacturaDetalle> ls; 
+	    	
+	    	List<Stock> st;
+	    	
+	    	Stock aux;
+	    	
+	    	try {
+				
+				fc = ejbfacturaCabeceraFacade.find(id);
+				fc.setAnulado('S');
+				ejbfacturaCabeceraFacade.edit(fc);
+				
+				ls = ejbFacturaDetalleFacade.buscarBodegaPorNombre(fc);
+				
+				for (FacturaDetalle d : ls) {
+					st = ejbStockFacade.recuperarStockProducto(d.getProducto());
+					aux = st.get(0);
+					aux.setStock(st.get(0).getStock()+d.getCantidad());
+					ejbStockFacade.edit(aux);
+				}
+				
+				System.out.println(">> FACTURA ANULADA");
+				this.init();
+				
+				FacesContext.getCurrentInstance().getExternalContext().redirect("/Practica_Laboratorio_03-EJB-JSF-JPA/private/listarFacturas.xhtml");
+			} catch (Exception e) {
+				System.out.println(">> FACTURA NO ANULADA");
+				this.init();
+				
+			}
+	    	
+		}
     
     public void obtenerFactura() {
     	List<FacturaCabecera> facturasCabecera = new ArrayList<FacturaCabecera>();
