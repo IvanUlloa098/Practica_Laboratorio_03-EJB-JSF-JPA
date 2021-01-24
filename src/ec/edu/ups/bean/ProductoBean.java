@@ -40,7 +40,7 @@ public class ProductoBean implements Serializable{
     private String imagen;
     private String precioCompra;
     private String precioVenta;
-    private String iva;
+    private String iva = "N";
     private String stock;
     private String categoria;
     private List<Categoria> list;
@@ -347,7 +347,7 @@ public class ProductoBean implements Serializable{
         nombre = null;
         precioCompra = null;
         precioVenta = null;
-        iva = null;
+        iva = "N";
         
         FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "paginaProducto.xhtml");
         
