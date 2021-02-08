@@ -37,6 +37,11 @@ xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
   
+  <error-page>
+    <error-code>404</error-code>
+    <location>/public/error.xhtml</location>
+   </error-page>
+  
 </web-app>
 
 
