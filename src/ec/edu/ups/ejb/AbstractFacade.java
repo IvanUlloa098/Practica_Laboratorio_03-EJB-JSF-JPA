@@ -1,22 +1,20 @@
 package ec.edu.ups.ejb;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
 
-public abstract class AbstractFacade<T>{
-
-    private Class<T> entityClass;
-
-    public AbstractFacade(Class<T> entityClass){
-        this.entityClass = entityClass;
-    }
-
-    protected abstract EntityManager getEntityManager();
-
-
-    public boolean create(T entity) {
+public abstract class AbstractFacade <T> {
+private Class<T> entityClass;
+	
+	public AbstractFacade(Class<T> entityClass) {
+		this.entityClass = entityClass;
+	}
+	protected abstract EntityManager getEntityManager();
+	
+	public boolean create(T entity) {
         try {
             getEntityManager().persist(entity);
             return true;
@@ -47,6 +45,7 @@ public abstract class AbstractFacade<T>{
     public T find(Object id){
         return getEntityManager().find(entityClass, id);
     }
+    
 
     public List<T> findAll(){
         CriteriaQuery criteriaQuery = getEntityManager().getCriteriaBuilder().createQuery();
@@ -55,6 +54,12 @@ public abstract class AbstractFacade<T>{
         return query.getResultList();
     }
 
-   
-
+    public int count() {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
+        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
 }
+

@@ -11,8 +11,10 @@ import javax.faces.annotation.FacesConfig;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+//import javax.servlet.http.Cookie;
 
 import org.glassfish.grizzly.http.Cookie;
+//import org.glassfish.grizzly.http.Cookie;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
