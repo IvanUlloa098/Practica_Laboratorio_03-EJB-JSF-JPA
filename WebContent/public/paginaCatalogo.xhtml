@@ -5,8 +5,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 <link rel="stylesheet" type="text/css" href="css/style.css" media="screen"/>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
@@ -32,7 +30,7 @@
 
 <h:body style="margin-bottom: 5%; background-color: #a1b3ba; background-image: url('https://64.media.tumblr.com/3ee53ca82e524e8849913567a51d9079/tumblr_moel85NxLx1qmxiy0o1_500.gif');background-size:100%; background-repeat: no-repeat"  >
 
-   
+    <!-- BARRA DE NAVEGACION -->
     <h:panelGroup>
         <div class="navbar navbar-expand-sm bg-dark navbar-dark">
             <a class="navbar-brand" style="margin-right: 20px">Bodegas</a>
@@ -48,63 +46,94 @@
                     <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle"
                                      style="margin-left: 10px; margin-right: 10px"
                                      value="#{catalogoBean.categoriaSeleccionada}">
-                        <f:selectItems value="#{catalogoBean.categoriasList}" var="categoria" itemValue="#{categoria.codigo}" itemLabel="#{categoria.nombre}" pt:styleClass="dropdown-item"/>
-                        <f:ajax render="tabla1"/>
+                        <f:selectItems value="#{catalogoBean.categorias}" pt:styleClass="dropdown-item"/>
+                        <f:ajax listener="#{catalogoBean.cargarProductosPorCategoria}" render=":table_father"/>
                     </h:selectOneMenu>
                 </fieldset>
             </h:form>
-            
+
+            <h:form>
+                <fieldset>
+                    <h:selectOneMenu styleClass="btn btn-secondary dropdown-toggle"
+                                     style="margin-left: 10px; margin-right: 10px"
+                                        value="#{catalogoBean.bodegaSeleccionada}">
+                        <f:selectItems value="#{catalogoBean.bodegas}" pt:styleClass="dropdown-item"/>
+                        <f:ajax listener="#{catalogoBean.cargarProductosPorBodega}" render=":table_father"/>
+                    </h:selectOneMenu>
+                </fieldset>
+            </h:form>
             <h:form>
             <h:commandButton styleClass="btn btn-primary" value="Iniciar Sesion" action="#{catalogoBean.redirect}"  style="margin-left: auto; float: right"/>
             </h:form>
         </div>
 
-        
+        <!-- APARTADO PARA LOS PRODUCTOS -->
         <br/>
-        
-         <h:dataTable id="tabla1" value="#{catalogoBean.filtrado2}" var="p"
+        <h:panelGroup id="table_father">
+            <h:dataTable id="tabla" value="#{catalogoBean.productos.entrySet().toArray()}" var="entry"
                          styleClass="table table-dark table-striped" style="width: 70%;
-             margin-left: auto; margin-right: auto;">
+             margin-left: auto; margin-right: auto;"
+                         rendered="#{not empty catalogoBean.productos}">
 
-                <h:column>
-		            <f:facet name="header">Nombre</f:facet>
-		            <h:outputText value="#{p.nombre}"  />
-		           
-		            
-		        </h:column>
-		          <h:column>
-		        
-		           <f:facet name="header">PrecioCompra</f:facet>
-		            <h:outputText value="#{p.precioCompra}"  />
-		            
-		        </h:column>
-		          <h:column>
-		        
-		           <f:facet name="header">PrecioVenta</f:facet>
-		            <h:outputText value="#{p.precioVenta}"  />
-		            
-		        </h:column>
-		        
-		        <h:column>
-		        
-		           <f:facet name="header">Categoria</f:facet>
-		            <h:outputText value="#{p.categoria.nombre}"  />
-		            
-		        </h:column>
-		        
-		        <h:column>
-		        
-		           <f:facet name="header">Stock Total</f:facet>
-		            <h:outputText value="#{p.stock}"  />
-		            
-		        </h:column>
-                
+                <h:column pt:style="text-align: center">
+                    <f:facet name="header" pt:style="width: 150%">
+                        <h5>Codigo Del Producto</h5>
+                    </f:facet>
+                    #{entry.key}
+                </h:column>
+
+                <h:column pt:style="text-align: center">
+                    <f:facet name="header" pt:style="width: 150%">
+                        <h5>Nombre Del Producto</h5>
+                    </f:facet>
+                    #{entry.value}
+                </h:column>
+
+                <h:column pt:style="text-align: center">
+                    <f:facet name="header" pt:style="width: 150%">
+                        <h5>Mas Informacion</h5>
+                    </f:facet>
+
+                    <h:form>
+                        <h:commandLink value="Abrir Producto" action="#{catalogoBean.abrirProducto(entry.key)}">
+                            <f:ajax event="action"
+                                    render="codigo_producto nombre_producto imagen_producto precioVenta_producto stock_producto"
+                                    onevent="mostrarInformacion()"/>
+                        </h:commandLink>
+                    </h:form>
+
+                </h:column>
             </h:dataTable>
-        
-        
-        
-        
-        
+        </h:panelGroup>
+
+        <div id="mas_info" style="width: 70%; margin-left: auto; margin-right: auto; display: none" class="container">
+            <h3 style="margin-top: 50px; width: 100%">Informacion del producto Seleccionado <h:commandButton
+                    styleClass="btn btn-danger" value="X" style="margin-left: 5%" onclick="ocultarInformacion()"/></h3>
+            <br/>
+
+            <table class="table table-hover" style="background-color: white">
+                <tbody>
+                <tr>
+                    <td style="width: 40%; border-right: black solid 2px"><strong>Codigo Del Producto:</strong></td>
+                    <td><h:outputText id="codigo_producto" value="#{catalogoBean.producto.codigo}"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Nombre Del Producto:</strong></td>
+                    <td><h:outputText id="nombre_producto" value="#{catalogoBean.producto.nombre}"/></td>
+                </tr>
+               
+                <tr>
+                    <td><strong>Precio De Venta:</strong></td>
+                    <td><h:outputText id="precioVenta_producto" value="#{catalogoBean.producto.precioVenta}"/></td>
+                </tr>
+                <tr>
+                    <td style="width: 40%; border-right: black solid 2px"><strong>Stock:</strong></td>
+                    <td><h:outputText id="stock_producto" value="#{catalogoBean.producto.stock}"/></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </h:panelGroup>
 </h:body>
 </html>
+

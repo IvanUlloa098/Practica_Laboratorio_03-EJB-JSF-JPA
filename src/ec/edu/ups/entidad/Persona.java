@@ -58,11 +58,11 @@ public class Persona implements Serializable {
 	        this.nombre = nombre;
 	        this.apellido = apellido;
 	        this.direccion = direccion;
-<<<<<<< HEAD
+
 	        this.telefono = telefono;
-=======
+
 	        this.telefono=telefono;
->>>>>>> origin/Kevin
+
 	    }
 
 	    public String getCorreo() {
