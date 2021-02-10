@@ -15,25 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" type="javascript"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" type="javascript"></script>
 <script src="public/css/alertify.min.js" type="text/javascript"></script>
-<head>
 
-<script type="text/javascript">
-
- function alerta()
-                {
-                var mensaje;
-
-                var opcion = confirm("Clicka en Aceptar o Cancelar");
-                if (opcion == true) {
-                    mensaje = "Has clickado OK";
-            	} else {
-            	    mensaje = "Has clickado Cancelar";
-            	}
-            	document.getElementById("ejemplo").innerHTML = mensaje;
-            }
-				</script>
-
-</head>
 
 
 <h:body style="background-image: url('https://ph-files.imgix.net/6f3ef1a1-f383-401e-898b-0e82b56563f3?auto=format');background-size:26%; background-repeat: no-repeat" >
@@ -63,9 +45,21 @@
                     <h:commandButton value="Iniciar Sesion" styleClass="btn btn-primary btn-block" action="#{logInBean.validateUser()}"/><br/>
                 </div>
                 
-                  <p id="ejemplo">En este párrafo se mostrará la opción clickada por el usuario</p>
-                 
-                <button onclick="alerta()">Clicka para mostrar mensaje</button>
+               <head>
+
+<script type="text/javascript">
+
+function cambia_de_pagina(){
+    alert("Sítio se dirijira a la pagina de ayuda en línea ")
+    location.href="https://www.assistenlinea.com/"
+}
+</script>
+
+<div id="botones">
+   <input type="button" onclick="javascript:cambia_de_pagina();" value="Contactenos" />
+</div>
+
+</head>
                 
             
                 
